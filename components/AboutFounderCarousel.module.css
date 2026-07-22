@@ -38,12 +38,14 @@
 
 .heading {
   margin: 0 0 0.5em;
+  text-align: left;
 }
 
 .paragraph {
   margin: 0 0 1em;
   font-size: 16px;
   line-height: 30px;
+  text-align: left;
 }
 
 /* Slide 0 (intro): 700px text block (6 cols), centered in the placeholder. */
@@ -83,19 +85,22 @@
   font-size: 26px;
   line-height: 30px;
   font-style: italic;
+  text-align: left;
 }
 
-/* Slide 1 (photo+text): fixed 530px text column on the right, photo fills the rest. */
+/* Slide 1 (photo+text): equal 530px/530px columns, top-aligned, image
+   stretched to match the text column's height (align-items: stretch gives
+   both the shared top line and the matched height in one property). */
 .photoText {
   display: grid;
-  grid-template-columns: 1fr 530px;
-  gap: 20px;
-  align-items: center;
+  grid-template-columns: 530px 530px;
+  gap: 120px;
+  align-items: stretch;
 }
 
 .photo {
   width: 100%;
-  height: auto;
+  height: 100%;
   display: block;
   object-fit: cover;
 }
@@ -103,7 +108,7 @@
 /* TODO: swap for the real photo once provided. */
 .photoPlaceholder {
   width: 100%;
-  aspect-ratio: 1 / 1;
+  height: 100%;
   background: #000;
 }
 
@@ -112,20 +117,19 @@
   max-width: 100%;
 }
 
-/* Slides 2-3: two fixed 530px columns, symmetric, held to the edges of the
-   10-column (1180px) span (the ~120px middle gap is whatever space remains). */
+/* Slides 2-3: continuous text flowing into two 530px columns (like a
+   magazine layout) with a 120px gutter, matching the photo+text slide's
+   530/530/120 proportions. Heading spans both columns. */
 .columns {
-  display: flex;
-  justify-content: space-between;
+  column-count: 2;
+  column-width: 530px;
+  column-gap: 120px;
 }
 
-.column {
-  flex: 0 0 530px;
-  max-width: 530px;
-}
-
-.columnHeading {
+.columnsHeading {
+  column-span: all;
   margin: 0 0 0.5em;
+  text-align: left;
 }
 
 .arrows {
@@ -166,6 +170,7 @@
 @media (max-width: 780px) {
   .photoText {
     grid-template-columns: 1fr;
+    gap: 20px;
   }
 
   .photoTextContent {
@@ -173,13 +178,7 @@
   }
 
   .columns {
-    flex-direction: column;
-    gap: 20px;
-  }
-
-  .column {
-    flex: 0 0 auto;
-    max-width: 100%;
+    column-count: 1;
   }
 
   .intro {
