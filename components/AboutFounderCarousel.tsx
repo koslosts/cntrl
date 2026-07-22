@@ -26,7 +26,7 @@ type TextBlock =
 type Slide =
   | { kind: 'intro'; heading?: string; blocks: TextBlock[]; cta: string }
   | { kind: 'photo-text'; heading?: string; paragraphs: string[]; photoSrc?: string; photoAlt: string }
-  | { kind: 'columns'; heading?: string; blocks: TextBlock[] };
+  | { kind: 'columns'; heading?: string; blocks: TextBlock[]; singleColumn?: boolean };
 
 const SLIDES: Slide[] = [
   {
@@ -68,7 +68,9 @@ const SLIDES: Slide[] = [
       { type: 'paragraph', text: 'Мені потрібна англійська, але я не хочу перетворювати життя на ще один марафон самовдосконалення — це фраза, яку я чула найчастіше.' },
       { type: 'paragraph', text: 'Щоразу мене дивувало одне й те саме: ці люди успішно реалізовували складні проєкти, керували командами, запускали бізнеси та освоювали нові професійні сфери. Проблема була не у відсутності здібностей. Проблема була у форматі.' },
       { type: 'paragraph', text: 'Більшість навчальних програм вимагали від дорослої людини поводитися так, ніби вона має нескінченний запас часу, уваги та енергії. Але реальне життя влаштоване інакше.' },
-      { type: 'quote', text: '«Іванно, англійська потрібна мені щодня. Але від самої думки про навчання я вже втомився», — сказав мені один із наших клієнтів. І в цій фразі було набагато більше правди, ніж здається на перший погляд.' },
+      { type: 'paragraph', text: 'Одного разу один із наших клієнтів сказав мені:' },
+      { type: 'quote', text: '«Іванно, англійська потрібна мені щодня. Але від самої думки про навчання я вже втомився».' },
+      { type: 'paragraph', text: 'І в цій фразі було набагато більше правди, ніж здається на перший погляд.' },
     ],
   },
   {
@@ -80,6 +82,7 @@ const SLIDES: Slide[] = [
       { type: 'paragraph', text: 'А разом із цим з’являвся простір для природного розвитку. Так народився індивідуальний мовний супровід The Key.' },
       { type: 'paragraph', text: 'За роки роботи я переконалася, що дорослі люди рідко потребують більшого тиску. Набагато частіше вони потребують середовища, у якому можуть рухатися вперед стабільно та у власному темпі.' },
     ],
+    singleColumn: true,
   },
 ];
 
@@ -161,7 +164,7 @@ export const AboutFounderCarousel: FC = () => {
               )}
 
               {slide.kind === 'columns' && (
-                <div className={styles.columns}>
+                <div className={slide.singleColumn ? styles.columnsSingle : styles.columns}>
                   {slide.heading && <h3 className={styles.columnsHeading}>{slide.heading}</h3>}
                   {slide.blocks.map((block, bi) =>
                     block.type === 'quote' ? (

@@ -153,6 +153,14 @@
   column-gap: 8.3333vw; /* 120px */
 }
 
+/* Single-column variant (e.g. slide 4): like .intro, but a bit wider --
+   8 cols (940px) vs .intro's 6 cols (700px). */
+.columnsSingle {
+  width: 65.2778vw; /* 940px */
+  max-width: 100%;
+  margin: 0 auto;
+}
+
 .columnsHeading {
   column-span: all;
   margin: 0 0 0.5em;
