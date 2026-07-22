@@ -86,6 +86,8 @@ const SLIDES: Slide[] = [
   },
 ];
 
+const INTRO_CTA = SLIDES[0].kind === 'intro' ? SLIDES[0].cta : '';
+
 export const AboutFounderCarousel: FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [started, setStarted] = useState(false);
@@ -138,9 +140,6 @@ export const AboutFounderCarousel: FC = () => {
                       <p key={bi} className={styles.paragraph}>{block.text}</p>
                     )
                   )}
-                  <button type="button" className={styles.ctaLink} onClick={handleStart}>
-                    {slide.cta} <span aria-hidden="true">&#8594;</span>
-                  </button>
                 </div>
               )}
 
@@ -180,7 +179,7 @@ export const AboutFounderCarousel: FC = () => {
         </div>
       </div>
 
-      {started && (
+      {started ? (
         <div className={styles.arrows}>
           <button
             type="button"
@@ -200,6 +199,12 @@ export const AboutFounderCarousel: FC = () => {
               &#8594;
             </button>
           )}
+        </div>
+      ) : (
+        <div className={styles.ctaRow}>
+          <button type="button" className={styles.ctaLink} onClick={handleStart}>
+            {INTRO_CTA} <span aria-hidden="true">&#8594;</span>
+          </button>
         </div>
       )}
     </div>

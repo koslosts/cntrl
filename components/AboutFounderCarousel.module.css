@@ -63,6 +63,15 @@
   margin: 0 auto;
 }
 
+/* Sits in the same slot as .arrows (right after .viewport, same margin-top)
+   so the CTA and the arrows land at an identical vertical position --
+   width/centering matches .intro so it lines up with the intro text above it. */
+.ctaRow {
+  width: 48.6111vw; /* 700px, same as .intro */
+  max-width: 100%;
+  margin: 1.5em auto 0;
+}
+
 /* Underlined text link with a trailing arrow, matching the existing
    "Читати історію повністю →" style already on the page. */
 .ctaLink {
@@ -74,7 +83,6 @@
   background: none;
   border: none;
   padding: 0;
-  margin-top: 1.5em;
   text-decoration: underline;
   text-underline-offset: 0.2em;
   cursor: pointer;
@@ -100,23 +108,23 @@
 }
 
 /* Slide 1 (photo+text): equal 530px/530px columns, top-aligned, image
-   stretched to match the text column's height (align-items: stretch gives
-   both the shared top line and the matched height in one property). */
+   stretched to match the text column's height. Flexbox instead of grid --
+   grid's align-items:stretch didn't reliably resolve the wrapper's
+   percentage height against an auto-sized row in practice; flex's stretch
+   sizes cross-axis (height) off the tallest sibling's content directly. */
 .photoText {
-  display: grid;
-  grid-template-columns: 36.8056vw 36.8056vw; /* 530px 530px */
+  display: flex;
   gap: 8.3333vw; /* 120px */
   align-items: stretch;
-  justify-content: center; /* center the fixed-width tracks in the now full-bleed (12-col) container */
+  justify-content: center; /* center the fixed-width children in the now full-bleed (12-col) container */
 }
 
-/* Empty wrapper, so it contributes no intrinsic height to the grid row's
-   auto-sizing pass -- the row height comes purely from .photoTextContent,
-   then this wrapper's height: 100% resolves against that, and the
-   absolutely positioned image/placeholder inside fills and crops to it. */
+/* No height set -- flex stretch sizes it to match .photoTextContent's
+   content height, then the absolutely positioned image/placeholder inside
+   fills and crops to that. */
 .photoWrapper {
+  flex: 0 0 36.8056vw; /* 530px */
   position: relative;
-  height: 100%;
   overflow: hidden;
 }
 
@@ -137,7 +145,7 @@
 }
 
 .photoTextContent {
-  width: 36.8056vw; /* 530px */
+  flex: 0 0 36.8056vw; /* 530px */
   max-width: 100%;
 }
 
@@ -207,11 +215,13 @@
    measures actual viewport width, unlike element sizing above. */
 @media (max-width: 780px) {
   .photoText {
-    grid-template-columns: 1fr;
+    flex-direction: column;
     gap: 20px;
   }
 
+  .photoWrapper,
   .photoTextContent {
+    flex-basis: auto;
     width: 100%;
   }
 
