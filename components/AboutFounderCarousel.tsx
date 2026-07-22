@@ -25,7 +25,7 @@ type TextBlock =
 
 type Slide =
   | { kind: 'intro'; heading?: string; blocks: TextBlock[]; cta: string }
-  | { kind: 'photo-text'; heading?: string; paragraphs: string[]; photoSrc?: string; photoAlt: string; photoPosition?: 'left' | 'right' }
+  | { kind: 'photo-text'; heading?: string; paragraphs: string[]; photoSrc?: string; photoAlt: string; photoPosition?: 'left' | 'right'; photoObjectPosition?: string }
   | { kind: 'columns'; heading?: string; blocks: TextBlock[]; singleColumn?: boolean };
 
 const SLIDES: Slide[] = [
@@ -60,6 +60,7 @@ const SLIDES: Slide[] = [
     ],
     photoSrc: '/51.jpg',
     photoAlt: 'Засновник на початку шляху',
+    photoObjectPosition: 'center',
   },
   {
     kind: 'columns',
@@ -149,7 +150,12 @@ export const AboutFounderCarousel: FC = () => {
                   <div className={slide.photoPosition === 'right' ? styles.photoWrapperRight : styles.photoWrapper}>
                     {slide.photoSrc ? (
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img className={styles.photo} src={slide.photoSrc} alt={slide.photoAlt} />
+                      <img
+                        className={styles.photo}
+                        src={slide.photoSrc}
+                        alt={slide.photoAlt}
+                        style={slide.photoObjectPosition ? { objectPosition: slide.photoObjectPosition } : undefined}
+                      />
                     ) : (
                       <div className={styles.photoPlaceholder} role="img" aria-label={slide.photoAlt} />
                     )}
