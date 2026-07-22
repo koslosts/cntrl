@@ -1,0 +1,122 @@
+/*
+  Intentionally does not set font-family/colors here — the component inherits
+  typography from the page's own design system (breakpoint classes generated
+  by `cntrl-sdk generate-layouts`). Adjust the 780px breakpoint below to match
+  the project's real breakpoints once known.
+*/
+
+.root {
+  width: 100%;
+  position: relative;
+}
+
+.viewport {
+  width: 100%;
+  overflow: hidden;
+}
+
+.track {
+  display: flex;
+  width: 100%;
+  transition: transform 0.5s ease;
+}
+
+.slide {
+  flex: 0 0 100%;
+  min-width: 100%;
+  box-sizing: border-box;
+  padding: 0 0.5em;
+}
+
+.heading {
+  margin: 0 0 0.5em;
+}
+
+.paragraph {
+  margin: 0 0 1em;
+  line-height: 1.5;
+}
+
+.intro {
+  max-width: 40em;
+}
+
+.ctaButton {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  padding: 0.6em 1.4em;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.ctaButton:hover {
+  opacity: 0.7;
+}
+
+.photoText {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2em;
+  align-items: center;
+}
+
+.photo {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2em;
+}
+
+.columnHeading {
+  margin: 0 0 0.5em;
+}
+
+.arrows {
+  display: flex;
+  justify-content: center;
+  gap: 1em;
+  margin-top: 1.5em;
+  animation: fadeIn 0.3s ease;
+}
+
+.arrowButton {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  width: 2.5em;
+  height: 2.5em;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.arrowButton:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.arrowButton:not(:disabled):hover {
+  opacity: 0.7;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-0.5em); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 780px) {
+  .photoText,
+  .columns {
+    grid-template-columns: 1fr;
+  }
+}
