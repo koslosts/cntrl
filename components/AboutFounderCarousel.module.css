@@ -108,23 +108,26 @@
 }
 
 /* Slide 1 (photo+text): equal 530px/530px columns, top-aligned, image
-   stretched to match the text column's height. Flexbox instead of grid --
-   grid's align-items:stretch didn't reliably resolve the wrapper's
-   percentage height against an auto-sized row in practice; flex's stretch
-   sizes cross-axis (height) off the tallest sibling's content directly. */
+   stretched to match the text column's height. Neither CSS grid's
+   align-items:stretch (percentage height vs. an auto-sized row) nor
+   flexbox's stretch reliably matched the photo's height to the text in
+   practice, so this avoids the ambiguity entirely: .photoWrapper is fully
+   out of flow (position: absolute), leaving .photoTextContent as the only
+   normal-flow child -- .photoText's height is therefore determined purely
+   by the text, with nothing else that could inflate it. */
 .photoText {
-  display: flex;
-  gap: 8.3333vw; /* 120px */
-  align-items: stretch;
-  justify-content: center; /* center the fixed-width children in the now full-bleed (12-col) container */
+  position: relative;
+  width: 81.9445vw; /* 2 * 530px + 120px gap, same total as .columns */
+  max-width: 100%;
+  margin: 0 auto; /* center in the full-bleed (12-col) container */
 }
 
-/* No height set -- flex stretch sizes it to match .photoTextContent's
-   content height, then the absolutely positioned image/placeholder inside
-   fills and crops to that. */
 .photoWrapper {
-  flex: 0 0 36.8056vw; /* 530px */
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 36.8056vw; /* 530px */
+  height: 100%;
   overflow: hidden;
 }
 
@@ -145,7 +148,7 @@
 }
 
 .photoTextContent {
-  flex: 0 0 36.8056vw; /* 530px */
+  margin-left: calc(36.8056vw + 8.3333vw); /* photo width + gap, pushes text past the absolutely positioned photo */
   max-width: 100%;
 }
 
@@ -185,8 +188,8 @@
 }
 
 .arrowButton {
-  font: inherit;
-  font-size: 1.5em;
+  font-family: inherit;
+  font-size: 1.6667vw; /* 24px -- was `1.5em` inheriting the page's fixed (non-vw) font-size, so it didn't scale with the viewport like everything else here */
   font-weight: 700;
   color: inherit;
   background: none;
@@ -214,14 +217,17 @@
    once known -- media query thresholds stay in real px since @media always
    measures actual viewport width, unlike element sizing above. */
 @media (max-width: 780px) {
-  .photoText {
-    flex-direction: column;
-    gap: 20px;
+  /* Stack: photo becomes a normal-flow block above the text instead of an
+     absolutely positioned overlay to its left. */
+  .photoWrapper {
+    position: static;
+    width: 100%;
+    height: 60vw;
+    margin-bottom: 20px;
   }
 
-  .photoWrapper,
   .photoTextContent {
-    flex-basis: auto;
+    margin-left: 0;
     width: 100%;
   }
 
