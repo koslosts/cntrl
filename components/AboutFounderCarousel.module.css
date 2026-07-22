@@ -96,6 +96,7 @@
   line-height: 2.0833vw; /* 30px */
   font-style: italic;
   text-align: left;
+  break-inside: avoid; /* keep whole when inside the 2-column slides' column-count flow */
 }
 
 /* Slide 1 (photo+text): equal 530px/530px columns, top-aligned, image
