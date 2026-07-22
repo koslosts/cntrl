@@ -65,12 +65,13 @@
    "Читати історію повністю →" style already on the page. */
 .ctaLink {
   font: inherit;
-  font-size: 1.1111vw; /* 16px */
-  line-height: 2.0833vw; /* 30px */
+  font-size: 0.8333vw; /* 12px */
+  line-height: 1.5;
   color: inherit;
   background: none;
   border: none;
   padding: 0;
+  margin-top: 1.5em;
   text-decoration: underline;
   text-underline-offset: 0.2em;
   cursor: pointer;
