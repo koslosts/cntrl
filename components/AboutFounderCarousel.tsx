@@ -1,5 +1,29 @@
 import { FC, useCallback, useEffect, useState } from 'react';
+import { Cormorant_Garamond } from 'next/font/google';
+import localFont from 'next/font/local';
 import styles from './AboutFounderCarousel.module.css';
+
+// Self-hosted via next/font instead of relying on the page's own font
+// loading, since that appears to register fonts under a hashed family name
+// that a literal `font-family: 'Cormorant Garamond'` doesn't match.
+// CAVEAT: Google's Cormorant Garamond may not ship Cyrillic glyphs -- if the
+// Ukrainian quote text still falls back to a system serif after this change,
+// we need actual font files (next/font/local) instead of next/font/google.
+const cormorantGaramond = Cormorant_Garamond({
+  subsets: ['latin', 'cyrillic'],
+  weight: '400',
+  style: 'italic',
+  display: 'swap',
+});
+
+// TODO: this is Regular (400), not Light (300) -- only Regular/Thin .otf
+// files were provided, no Light. Swap the src for the real Light file once
+// you have it; using Regular in the meantime for legibility over Thin.
+const eUkraine = localFont({
+  src: '../fonts/eUkraineRegular.otf',
+  weight: '400',
+  display: 'swap',
+});
 
 type IntroBlock =
   | { type: 'paragraph'; text: string }
@@ -98,7 +122,7 @@ export const AboutFounderCarousel: FC = () => {
   }, [started, handlePrev, handleNext]);
 
   return (
-    <div className={styles.root}>
+    <div className={`${styles.root} ${eUkraine.className}`}>
       <div className={styles.viewport}>
         <div
           className={styles.track}
@@ -111,7 +135,7 @@ export const AboutFounderCarousel: FC = () => {
                   {slide.heading && <h3 className={styles.heading}>{slide.heading}</h3>}
                   {slide.blocks.map((block, bi) =>
                     block.type === 'quote' ? (
-                      <blockquote key={bi} className={styles.quote}>{block.text}</blockquote>
+                      <blockquote key={bi} className={`${styles.quote} ${cormorantGaramond.className}`}>{block.text}</blockquote>
                     ) : (
                       <p key={bi} className={styles.paragraph}>{block.text}</p>
                     )
