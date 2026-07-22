@@ -5,7 +5,10 @@
   Font (e-Ukraine Light 16/30) is the page's own default body style and is
   intentionally NOT set here — only size/line-height are pinned so the
   component doesn't silently drift if it ever renders outside that cascade.
-  Letter-spacing: TODO, waiting on exact value.
+  Quote uses Cormorant Garamond 26/30 explicitly, since that's a deliberate
+  accent font, not the page's inherited default -- assumes it's already
+  loaded globally by the page (it's used natively elsewhere on the site).
+  letter-spacing 0.3px applies to both fonts, set once here and inherited.
   Tablet/mobile breakpoints: TODO, only a placeholder 780px collapse below
   until real breakpoint values are known.
 */
@@ -13,6 +16,7 @@
 .root {
   width: 100%;
   position: relative;
+  letter-spacing: 0.3px;
 }
 
 .viewport {
@@ -75,6 +79,9 @@
   margin: 1em 0;
   padding-left: 1em;
   border-left: 2px solid currentColor;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  line-height: 30px;
   font-style: italic;
 }
 
@@ -91,6 +98,13 @@
   height: auto;
   display: block;
   object-fit: cover;
+}
+
+/* TODO: swap for the real photo once provided. */
+.photoPlaceholder {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #000;
 }
 
 .photoTextContent {

@@ -8,7 +8,7 @@ type TextColumn = {
 
 type Slide =
   | { kind: 'intro'; heading?: string; paragraphs: string[]; quote?: string; cta: string }
-  | { kind: 'photo-text'; heading?: string; paragraphs: string[]; photoSrc: string; photoAlt: string }
+  | { kind: 'photo-text'; heading?: string; paragraphs: string[]; photoSrc?: string; photoAlt: string }
   | { kind: 'columns'; columns: [TextColumn, TextColumn] };
 
 // TODO: replace placeholder copy/photo with real content from the founder's story.
@@ -29,7 +29,7 @@ const SLIDES: Slide[] = [
     paragraphs: [
       'Текст другого блоку — фото і опис ключового моменту історії.',
     ],
-    photoSrc: '/founder-story-1.jpg',
+    // TODO: photoSrc not set yet -- renders a black placeholder rectangle until the real photo is added.
     photoAlt: 'Засновник на початку шляху',
   },
   {
@@ -61,7 +61,14 @@ export const AboutFounderCarousel: FC = () => {
     goTo(1);
   }, [goTo]);
 
-  const handlePrev = useCallback(() => goTo(activeIndex - 1), [activeIndex, goTo]);
+  const handlePrev = useCallback(() => {
+    if (activeIndex <= 1) {
+      setStarted(false);
+      goTo(0);
+      return;
+    }
+    goTo(activeIndex - 1);
+  }, [activeIndex, goTo]);
   const handleNext = useCallback(() => goTo(activeIndex + 1), [activeIndex, goTo]);
 
   useEffect(() => {
@@ -98,8 +105,12 @@ export const AboutFounderCarousel: FC = () => {
 
               {slide.kind === 'photo-text' && (
                 <div className={styles.photoText}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img className={styles.photo} src={slide.photoSrc} alt={slide.photoAlt} />
+                  {slide.photoSrc ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img className={styles.photo} src={slide.photoSrc} alt={slide.photoAlt} />
+                  ) : (
+                    <div className={styles.photoPlaceholder} role="img" aria-label={slide.photoAlt} />
+                  )}
                   <div className={styles.photoTextContent}>
                     {slide.heading && <h3 className={styles.heading}>{slide.heading}</h3>}
                     {slide.paragraphs.map((p, pi) => (
@@ -132,8 +143,7 @@ export const AboutFounderCarousel: FC = () => {
             type="button"
             className={styles.arrowButton}
             onClick={handlePrev}
-            disabled={activeIndex <= 1}
-            aria-label="Попередній блок"
+            aria-label={activeIndex <= 1 ? 'Повернутись до "Читати повністю"' : 'Попередній блок'}
           >
             &#8592;
           </button>
