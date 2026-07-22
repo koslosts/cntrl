@@ -1,6 +1,5 @@
 import { FC, useCallback, useEffect, useState } from 'react';
 import { Cormorant_Garamond } from 'next/font/google';
-import localFont from 'next/font/local';
 import styles from './AboutFounderCarousel.module.css';
 
 // Self-hosted via next/font instead of relying on the page's own font
@@ -16,19 +15,9 @@ const cormorantGaramond = Cormorant_Garamond({
   display: 'swap',
 });
 
-const eUkraine = localFont({
-  src: '../fonts/eUkraineLight.otf',
-  weight: '300',
-  display: 'swap',
-});
-
-// TEMP: A/B test to figure out why our Light looks heavier than Control's
-// native "e-ukraine" 300 text -- remove this whole block once resolved.
-const eUkraineThinTest = localFont({
-  src: '../fonts/eUkraineThin.otf',
-  weight: '300',
-  display: 'swap',
-});
+// Body text uses the page's own already-loaded "e-ukraine" family directly
+// (set in the CSS module on .root) instead of self-hosting a copy -- an A/B
+// test confirmed the ambient reference matches Control's native rendering.
 
 type IntroBlock =
   | { type: 'paragraph'; text: string }
@@ -127,7 +116,7 @@ export const AboutFounderCarousel: FC = () => {
   }, [started, handlePrev, handleNext]);
 
   return (
-    <div className={`${styles.root} ${eUkraine.className}`}>
+    <div className={styles.root}>
       <div className={styles.viewport}>
         <div
           className={styles.track}
@@ -145,17 +134,6 @@ export const AboutFounderCarousel: FC = () => {
                       <p key={bi} className={styles.paragraph}>{block.text}</p>
                     )
                   )}
-                  {/* TEMP font A/B test -- remove once resolved */}
-                  <p className={styles.paragraph}>
-                    ТЕСТ A (self-hosted Light, next/font): Тестовий абзац для порівняння товщини шрифту.
-                  </p>
-                  <p className={`${styles.paragraph} ${eUkraineThinTest.className}`}>
-                    ТЕСТ B (self-hosted Thin, next/font): Тестовий абзац для порівняння товщини шрифту.
-                  </p>
-                  <p className={styles.paragraph} style={{ fontFamily: "'e-ukraine'", fontWeight: 300 }}>
-                    ТЕСТ C (ambient &apos;e-ukraine&apos; 300, без next/font): Тестовий абзац для порівняння товщини шрифту.
-                  </p>
-
                   <button type="button" className={styles.ctaLink} onClick={handleStart}>
                     {slide.cta} <span aria-hidden="true">&#8594;</span>
                   </button>

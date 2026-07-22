@@ -10,10 +10,10 @@
   Grid reference (desktop, from the project's Editor):
   12 columns x 100px, 20px gutters, 12 rows.
   Placeholder box measured ~1179x576 -> matches a 10-column span (10*100 + 9*20 = 1180).
-  Both fonts (e-Ukraine 16/30 body, Cormorant Garamond 26/30 quote) are
-  self-hosted via next/font in the component and applied via className,
-  not font-family here -- the page's own font loading uses hashed family
-  names that a literal font-family string here wouldn't match.
+  Body text uses the page's own already-loaded 'e-ukraine' family directly
+  (an A/B test confirmed the ambient reference renders identically to
+  Control's native text) -- only the quote's Cormorant Garamond is
+  self-hosted via next/font, applied via className in the component.
   letter-spacing 0.3px (0.0208vw) applies to both fonts, set once here and inherited.
   Tablet/mobile breakpoints: TODO, only a placeholder 780px collapse below
   until real breakpoint values (and their own vw reference frame) are known.
@@ -22,6 +22,8 @@
 .root {
   width: 100%;
   position: relative;
+  font-family: 'e-ukraine';
+  font-weight: 300;
   letter-spacing: 0.0208vw; /* 0.3px */
 }
 
