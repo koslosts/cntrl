@@ -67,6 +67,7 @@
    "Читати історію повністю →" style already on the page. */
 .ctaLink {
   font: inherit;
+  font-weight: 400;
   font-size: 0.8333vw; /* 12px */
   line-height: 1.5;
   color: inherit;
@@ -143,20 +144,19 @@
 
 .arrows {
   display: flex;
-  justify-content: center;
-  gap: 1em;
+  justify-content: space-between;
   margin-top: 1.5em;
   animation: fadeIn 0.3s ease;
 }
 
 .arrowButton {
   font: inherit;
+  font-size: 1.5em;
+  font-weight: 700;
   color: inherit;
   background: none;
-  border: 1px solid currentColor;
-  border-radius: 50%;
-  width: 2.5em;
-  height: 2.5em;
+  border: none;
+  padding: 0.25em 0.5em;
   cursor: pointer;
   transition: opacity 0.2s ease;
 }
