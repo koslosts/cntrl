@@ -25,7 +25,7 @@ type TextBlock =
 
 type Slide =
   | { kind: 'intro'; heading?: string; blocks: TextBlock[]; cta: string }
-  | { kind: 'photo-text'; heading?: string; paragraphs: string[]; photoSrc?: string; photoAlt: string }
+  | { kind: 'photo-text'; heading?: string; paragraphs: string[]; photoSrc?: string; photoAlt: string; photoPosition?: 'left' | 'right' }
   | { kind: 'columns'; heading?: string; blocks: TextBlock[]; singleColumn?: boolean };
 
 const SLIDES: Slide[] = [
@@ -75,14 +75,15 @@ const SLIDES: Slide[] = [
     ],
   },
   {
-    kind: 'columns',
-    blocks: [
-      { type: 'paragraph', text: 'Саме тоді почала формуватися ідея The Key — не як чергової програми чи методики, а як спроба відповісти на просте запитання: як має виглядати навчання для людини, яка вже має насичене життя?' },
-      { type: 'paragraph', text: 'Мені хотілося створити формат, де англійська не конкурує з роботою, сім’єю, відпочинком чи особистими проєктами. Формат, який не вимагає постійно «знаходити час», а враховує реальний ритм життя людини.' },
-      { type: 'paragraph', text: 'Поступово цей підхід почав працювати. Для когось англійська повернулася через професійні розмови, для когось — через книги та подкасти, для когось — через подорожі або нові кар’єрні можливості. Але майже завжди зміни починалися в одному місці: зникала напруга.' },
-      { type: 'paragraph', text: 'А разом із цим з’являвся простір для природного розвитку. Так народився індивідуальний мовний супровід The Key, на який я зараз відкриваю передзапис.' },
+    kind: 'photo-text',
+    paragraphs: [
+      'Саме тоді почала формуватися ідея The Key — не як чергової програми чи методики, а як спроба відповісти на просте запитання: як має виглядати навчання для людини, яка вже має насичене життя?',
+      'Мені хотілося створити формат, де англійська не конкурує з роботою, сім’єю чи відпочинком — формат, який не вимагає постійно «знаходити час», а враховує реальний ритм життя людини.',
+      'Поступово цей підхід почав працювати — і майже завжди зміни починалися в одному місці: зникала напруга. Так народився індивідуальний мовний супровід The Key, на який я зараз відкриваю передзапис.',
     ],
-    singleColumn: true,
+    photoSrc: '/38.jpg',
+    photoAlt: 'Іванна Кучеренко',
+    photoPosition: 'right',
   },
 ];
 
@@ -145,7 +146,7 @@ export const AboutFounderCarousel: FC = () => {
 
               {slide.kind === 'photo-text' && (
                 <div className={styles.photoText}>
-                  <div className={styles.photoWrapper}>
+                  <div className={slide.photoPosition === 'right' ? styles.photoWrapperRight : styles.photoWrapper}>
                     {slide.photoSrc ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img className={styles.photo} src={slide.photoSrc} alt={slide.photoAlt} />
@@ -153,7 +154,7 @@ export const AboutFounderCarousel: FC = () => {
                       <div className={styles.photoPlaceholder} role="img" aria-label={slide.photoAlt} />
                     )}
                   </div>
-                  <div className={styles.photoTextContent}>
+                  <div className={slide.photoPosition === 'right' ? styles.photoTextContentRight : styles.photoTextContent}>
                     {slide.heading && <h3 className={styles.heading}>{slide.heading}</h3>}
                     {slide.paragraphs.map((p, pi) => (
                       <p key={pi} className={styles.paragraph}>{p}</p>

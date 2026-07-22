@@ -131,6 +131,15 @@
   overflow: hidden;
 }
 
+.photoWrapperRight {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 36.8056vw; /* 530px */
+  height: 100%;
+  overflow: hidden;
+}
+
 .photo {
   position: absolute;
   inset: 0;
@@ -138,6 +147,7 @@
   height: 100%;
   display: block;
   object-fit: cover;
+  object-position: top; /* crop from the bottom, keep the top aligned */
 }
 
 /* TODO: swap for the real photo once provided. */
@@ -152,7 +162,13 @@
   max-width: 100%;
 }
 
-.photoTextContent > *:last-child {
+.photoTextContentRight {
+  margin-right: calc(36.8056vw + 8.3333vw); /* photo width + gap, on the other side */
+  max-width: 100%;
+}
+
+.photoTextContent > *:last-child,
+.photoTextContentRight > *:last-child {
   margin-bottom: 0; /* so the box (and the photo matched to it) ends right at the text, not after its trailing margin */
 }
 
@@ -223,15 +239,18 @@
 @media (max-width: 780px) {
   /* Stack: photo becomes a normal-flow block above the text instead of an
      absolutely positioned overlay to its left. */
-  .photoWrapper {
+  .photoWrapper,
+  .photoWrapperRight {
     position: static;
     width: 100%;
     height: 60vw;
     margin-bottom: 20px;
   }
 
-  .photoTextContent {
+  .photoTextContent,
+  .photoTextContentRight {
     margin-left: 0;
+    margin-right: 0;
     width: 100%;
   }
 
