@@ -16,10 +16,8 @@ const cormorantGaramond = Cormorant_Garamond({
   display: 'swap',
 });
 
-// TODO: this is the Thin .otf file, not a true Light -- no Light file was
-// provided. Using Thin since it was asked to look thinner than Regular.
 const eUkraine = localFont({
-  src: '../fonts/eUkraineThin.otf',
+  src: '../fonts/eUkraineLight.otf',
   weight: '300',
   display: 'swap',
 });
