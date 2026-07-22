@@ -1,4 +1,12 @@
 /*
+  Control renders the whole page scaled in vw against a 1440px reference
+  frame (confirmed via DevTools: an ancestor item wrapper has
+  `width: 83.3333vw`, and 1200/1440 = 0.833333 -- 1200px being our own
+  container's design width). Fixed px sizes here don't participate in that
+  scaling, so they drift out of proportion with the rest of the page at any
+  viewport other than exactly 1440px. Every size below is therefore expressed
+  in vw using the same reference: vw = px / 14.4.
+
   Grid reference (desktop, from the project's Editor):
   12 columns x 100px, 20px gutters, 12 rows.
   Placeholder box measured ~1179x576 -> matches a 10-column span (10*100 + 9*20 = 1180).
@@ -6,15 +14,15 @@
   self-hosted via next/font in the component and applied via className,
   not font-family here -- the page's own font loading uses hashed family
   names that a literal font-family string here wouldn't match.
-  letter-spacing 0.3px applies to both fonts, set once here and inherited.
+  letter-spacing 0.3px (0.0208vw) applies to both fonts, set once here and inherited.
   Tablet/mobile breakpoints: TODO, only a placeholder 780px collapse below
-  until real breakpoint values are known.
+  until real breakpoint values (and their own vw reference frame) are known.
 */
 
 .root {
   width: 100%;
   position: relative;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.0208vw; /* 0.3px */
 }
 
 .viewport {
@@ -41,14 +49,14 @@
 
 .paragraph {
   margin: 0 0 1em;
-  font-size: 16px;
-  line-height: 30px;
+  font-size: 1.1111vw; /* 16px */
+  line-height: 2.0833vw; /* 30px */
   text-align: left;
 }
 
 /* Slide 0 (intro): 700px text block (6 cols), centered in the placeholder. */
 .intro {
-  width: 700px;
+  width: 48.6111vw; /* 700px */
   max-width: 100%;
   margin: 0 auto;
 }
@@ -57,8 +65,8 @@
    "Читати історію повністю →" style already on the page. */
 .ctaLink {
   font: inherit;
-  font-size: 16px;
-  line-height: 30px;
+  font-size: 1.1111vw; /* 16px */
+  line-height: 2.0833vw; /* 30px */
   color: inherit;
   background: none;
   border: none;
@@ -81,8 +89,8 @@
   margin: 1em 0;
   padding-left: 1em;
   border-left: 2px solid currentColor;
-  font-size: 26px;
-  line-height: 30px;
+  font-size: 1.8056vw; /* 26px */
+  line-height: 2.0833vw; /* 30px */
   font-style: italic;
   text-align: left;
 }
@@ -92,8 +100,8 @@
    both the shared top line and the matched height in one property). */
 .photoText {
   display: grid;
-  grid-template-columns: 530px 530px;
-  gap: 120px;
+  grid-template-columns: 36.8056vw 36.8056vw; /* 530px 530px */
+  gap: 8.3333vw; /* 120px */
   align-items: stretch;
 }
 
@@ -112,7 +120,7 @@
 }
 
 .photoTextContent {
-  width: 530px;
+  width: 36.8056vw; /* 530px */
   max-width: 100%;
 }
 
@@ -121,8 +129,8 @@
    530/530/120 proportions. Heading spans both columns. */
 .columns {
   column-count: 2;
-  column-width: 530px;
-  column-gap: 120px;
+  column-width: 36.8056vw; /* 530px */
+  column-gap: 8.3333vw; /* 120px */
 }
 
 .columnsHeading {
@@ -165,7 +173,9 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* TODO: replace with the project's real breakpoints once known. */
+/* TODO: replace with the project's real breakpoints (and vw reference frame)
+   once known -- media query thresholds stay in real px since @media always
+   measures actual viewport width, unlike element sizing above. */
 @media (max-width: 780px) {
   .photoText {
     grid-template-columns: 1fr;
