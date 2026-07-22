@@ -4,9 +4,7 @@ import { CntrlProvider, customItems } from '@cntrl-site/sdk-nextjs';
 import '@cntrl-site/components/style/components.css';
 import { AboutFounderCarousel } from '../components/AboutFounderCarousel';
 
-// TODO: rename 'about-founder-carousel' to match exactly the name given to
-// the custom-component placeholder in the Editor (Puzzle icon -> double-click name).
-customItems.define('about-founder-carousel', AboutFounderCarousel);
+customItems.define('Slider', AboutFounderCarousel);
 
 function App({ Component, pageProps }: AppProps) {
   return (
