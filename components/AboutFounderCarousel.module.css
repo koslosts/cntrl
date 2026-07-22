@@ -1,8 +1,13 @@
 /*
-  Intentionally does not set font-family/colors here — the component inherits
-  typography from the page's own design system (breakpoint classes generated
-  by `cntrl-sdk generate-layouts`). Adjust the 780px breakpoint below to match
-  the project's real breakpoints once known.
+  Grid reference (desktop, from the project's Editor):
+  12 columns x 100px, 20px gutters, 12 rows.
+  Placeholder box measured ~1179x576 -> matches a 10-column span (10*100 + 9*20 = 1180).
+  Font (e-Ukraine Light 16/30) is the page's own default body style and is
+  intentionally NOT set here — only size/line-height are pinned so the
+  component doesn't silently drift if it ever renders outside that cascade.
+  Letter-spacing: TODO, waiting on exact value.
+  Tablet/mobile breakpoints: TODO, only a placeholder 780px collapse below
+  until real breakpoint values are known.
 */
 
 .root {
@@ -25,7 +30,6 @@
   flex: 0 0 100%;
   min-width: 100%;
   box-sizing: border-box;
-  padding: 0 0.5em;
 }
 
 .heading {
@@ -34,32 +38,51 @@
 
 .paragraph {
   margin: 0 0 1em;
-  line-height: 1.5;
+  font-size: 16px;
+  line-height: 30px;
 }
 
+/* Slide 0 (intro): 700px text block (6 cols), centered in the placeholder. */
 .intro {
-  max-width: 40em;
+  width: 700px;
+  max-width: 100%;
+  margin: 0 auto;
 }
 
-.ctaButton {
+/* Underlined text link with a trailing arrow, matching the existing
+   "Читати історію повністю →" style already on the page. */
+.ctaLink {
   font: inherit;
+  font-size: 16px;
+  line-height: 30px;
   color: inherit;
   background: none;
-  border: 1px solid currentColor;
-  border-radius: 999px;
-  padding: 0.6em 1.4em;
+  border: none;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
   cursor: pointer;
   transition: opacity 0.2s ease;
 }
 
-.ctaButton:hover {
+.ctaLink:hover {
   opacity: 0.7;
 }
 
+/* Accent color intentionally left as currentColor -- TODO: swap for the
+   project's real accent token (looked orange/terracotta in the reference). */
+.quote {
+  margin: 1em 0;
+  padding-left: 1em;
+  border-left: 2px solid currentColor;
+  font-style: italic;
+}
+
+/* Slide 1 (photo+text): fixed 530px text column on the right, photo fills the rest. */
 .photoText {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2em;
+  grid-template-columns: 1fr 530px;
+  gap: 20px;
   align-items: center;
 }
 
@@ -70,10 +93,21 @@
   object-fit: cover;
 }
 
+.photoTextContent {
+  width: 530px;
+  max-width: 100%;
+}
+
+/* Slides 2-3: two fixed 530px columns, symmetric, held to the edges of the
+   10-column (1180px) span (the ~120px middle gap is whatever space remains). */
 .columns {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2em;
+  display: flex;
+  justify-content: space-between;
+}
+
+.column {
+  flex: 0 0 530px;
+  max-width: 530px;
 }
 
 .columnHeading {
@@ -114,9 +148,27 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* TODO: replace with the project's real breakpoints once known. */
 @media (max-width: 780px) {
-  .photoText,
-  .columns {
+  .photoText {
     grid-template-columns: 1fr;
+  }
+
+  .photoTextContent {
+    width: 100%;
+  }
+
+  .columns {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .column {
+    flex: 0 0 auto;
+    max-width: 100%;
+  }
+
+  .intro {
+    width: 100%;
   }
 }

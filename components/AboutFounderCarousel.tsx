@@ -7,18 +7,20 @@ type TextColumn = {
 };
 
 type Slide =
-  | { kind: 'intro'; heading: string; paragraphs: string[]; cta: string }
-  | { kind: 'photo-text'; heading: string; paragraphs: string[]; photoSrc: string; photoAlt: string }
+  | { kind: 'intro'; heading?: string; paragraphs: string[]; quote?: string; cta: string }
+  | { kind: 'photo-text'; heading?: string; paragraphs: string[]; photoSrc: string; photoAlt: string }
   | { kind: 'columns'; columns: [TextColumn, TextColumn] };
 
 // TODO: replace placeholder copy/photo with real content from the founder's story.
+// heading left empty by default -- the section already renders its own title natively;
+// set it only if this slide needs a title of its own.
 const SLIDES: Slide[] = [
   {
     kind: 'intro',
-    heading: 'Про засновника',
     paragraphs: [
       'Коротка версія історії засновника, яка зʼявляється одразу на сторінці.',
     ],
+    quote: 'Виділена курсивна цитата (опційно) — залиш quote: undefined, якщо вона не потрібна на цьому слайді.',
     cta: 'Читати історію повністю',
   },
   {
@@ -83,12 +85,13 @@ export const AboutFounderCarousel: FC = () => {
             <div className={styles.slide} key={i} aria-hidden={i !== activeIndex}>
               {slide.kind === 'intro' && (
                 <div className={styles.intro}>
-                  <h3 className={styles.heading}>{slide.heading}</h3>
+                  {slide.heading && <h3 className={styles.heading}>{slide.heading}</h3>}
                   {slide.paragraphs.map((p, pi) => (
                     <p key={pi} className={styles.paragraph}>{p}</p>
                   ))}
-                  <button type="button" className={styles.ctaButton} onClick={handleStart}>
-                    {slide.cta}
+                  {slide.quote && <blockquote className={styles.quote}>{slide.quote}</blockquote>}
+                  <button type="button" className={styles.ctaLink} onClick={handleStart}>
+                    {slide.cta} <span aria-hidden="true">&#8594;</span>
                   </button>
                 </div>
               )}
@@ -98,7 +101,7 @@ export const AboutFounderCarousel: FC = () => {
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img className={styles.photo} src={slide.photoSrc} alt={slide.photoAlt} />
                   <div className={styles.photoTextContent}>
-                    <h3 className={styles.heading}>{slide.heading}</h3>
+                    {slide.heading && <h3 className={styles.heading}>{slide.heading}</h3>}
                     {slide.paragraphs.map((p, pi) => (
                       <p key={pi} className={styles.paragraph}>{p}</p>
                     ))}
