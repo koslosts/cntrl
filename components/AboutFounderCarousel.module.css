@@ -152,6 +152,10 @@
   max-width: 100%;
 }
 
+.photoTextContent > *:last-child {
+  margin-bottom: 0; /* so the box (and the photo matched to it) ends right at the text, not after its trailing margin */
+}
+
 /* Slides 2-3: continuous text flowing into two 530px columns (like a
    magazine layout) with a 120px gutter, matching the photo+text slide's
    530/530/120 proportions. Heading spans both columns. */
