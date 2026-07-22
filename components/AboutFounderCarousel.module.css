@@ -48,7 +48,7 @@
 }
 
 .paragraph {
-  margin: 0 0 1em;
+  margin: 0 0 1.5em;
   font-size: 1.1111vw; /* 16px */
   line-height: 2.0833vw; /* 30px */
   text-align: left;
@@ -82,13 +82,12 @@
 }
 
 /* font-family comes from the next/font className applied alongside this
-   class in the component -- not set here.
-   Accent color intentionally left as currentColor -- TODO: swap for the
-   project's real accent token (looked orange/terracotta in the reference). */
+   class in the component -- not set here. */
 .quote {
   margin: 1em 0;
   padding-left: 1em;
-  border-left: 2px solid currentColor;
+  border-left: 2px solid #9F5A38;
+  color: #9F5A38;
   font-size: 1.8056vw; /* 26px */
   line-height: 2.0833vw; /* 30px */
   font-style: italic;

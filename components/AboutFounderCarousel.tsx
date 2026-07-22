@@ -11,17 +11,16 @@ import styles from './AboutFounderCarousel.module.css';
 // we need actual font files (next/font/local) instead of next/font/google.
 const cormorantGaramond = Cormorant_Garamond({
   subsets: ['latin', 'cyrillic'],
-  weight: '400',
+  weight: '300',
   style: 'italic',
   display: 'swap',
 });
 
-// TODO: this is Regular (400), not Light (300) -- only Regular/Thin .otf
-// files were provided, no Light. Swap the src for the real Light file once
-// you have it; using Regular in the meantime for legibility over Thin.
+// TODO: this is the Thin .otf file, not a true Light -- no Light file was
+// provided. Using Thin since it was asked to look thinner than Regular.
 const eUkraine = localFont({
-  src: '../fonts/eUkraineRegular.otf',
-  weight: '400',
+  src: '../fonts/eUkraineThin.otf',
+  weight: '300',
   display: 'swap',
 });
 
