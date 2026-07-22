@@ -194,7 +194,7 @@
 .arrowButton {
   font-family: inherit;
   font-size: 1.6667vw; /* 24px -- was `1.5em` inheriting the page's fixed (non-vw) font-size, so it didn't scale with the viewport like everything else here */
-  font-weight: 700;
+  font-weight: 400;
   color: inherit;
   background: none;
   border: none;
