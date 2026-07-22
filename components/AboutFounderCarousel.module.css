@@ -156,7 +156,7 @@
 /* Single-column variant (e.g. slide 4): like .intro, but a bit wider --
    8 cols (940px) vs .intro's 6 cols (700px). */
 .columnsSingle {
-  width: 65.2778vw; /* 940px */
+  width: 48.6111vw; /* 700px, same as .intro (6 cols) */
   max-width: 100%;
   margin: 0 auto;
 }
