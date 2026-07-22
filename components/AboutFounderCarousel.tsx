@@ -1,49 +1,65 @@
 import { FC, useCallback, useEffect, useState } from 'react';
 import styles from './AboutFounderCarousel.module.css';
 
-type TextColumn = {
-  heading?: string;
-  paragraphs: string[];
-};
+type IntroBlock =
+  | { type: 'paragraph'; text: string }
+  | { type: 'quote'; text: string };
 
 type Slide =
-  | { kind: 'intro'; heading?: string; paragraphs: string[]; quote?: string; cta: string }
+  | { kind: 'intro'; heading?: string; blocks: IntroBlock[]; cta: string }
   | { kind: 'photo-text'; heading?: string; paragraphs: string[]; photoSrc?: string; photoAlt: string }
-  | { kind: 'columns'; columns: [TextColumn, TextColumn] };
+  | { kind: 'columns'; heading?: string; paragraphs: string[] };
 
-// TODO: replace placeholder copy/photo with real content from the founder's story.
-// heading left empty by default -- the section already renders its own title natively;
-// set it only if this slide needs a title of its own.
 const SLIDES: Slide[] = [
   {
     kind: 'intro',
-    paragraphs: [
-      'Коротка версія історії засновника, яка зʼявляється одразу на сторінці.',
+    blocks: [
+      {
+        type: 'paragraph',
+        text: 'Понад 15 років я працюю на перетині англійської мови, навчання та розвитку людей — від маленьких дітей до підприємців, керівників та власників бізнесів. Цей досвід навчив мене головного: успіх у навчанні рідко залежить лише від здібностей чи дисципліни. Значно частіше — від того, наскільки навчання відповідає реальному життю людини.',
+      },
+      {
+        type: 'paragraph',
+        text: 'Сьогодні англійська для мене — не навичка і не професійний інструмент. Це одна з тих речей, які роблять життя ширшим: книги мовою оригіналу, люди, чиї ідеї надихають, вільний рух між культурами та середовищами.',
+      },
+      {
+        type: 'quote',
+        text: 'Тиха розкіш — не те, що потрібно демонструвати іншим. А те, що непомітно розширює простір свободи у власному житті.',
+      },
+      {
+        type: 'paragraph',
+        text: 'Саме тому The Key створений не для студентів із вільним часом, а для дорослих, які хочуть розвиватися — але не готові жертвувати собою заради чергової цілі.',
+      },
     ],
-    quote: 'Виділена курсивна цитата (опційно) — залиш quote: undefined, якщо вона не потрібна на цьому слайді.',
     cta: 'Читати історію повністю',
   },
   {
     kind: 'photo-text',
-    heading: 'Початок шляху',
+    heading: 'Як усе почалося',
     paragraphs: [
-      'Текст другого блоку — фото і опис ключового моменту історії.',
+      'Моє знайомство з англійською почалося дуже рано. Мені було п’ять років, коли мама запросила для мене викладача. Я досі пам’ятаю це відчуття зацікавленості та легкості, з яким чекала кожного заняття.',
+      'Пізніше були школа, університет, професійний розвиток і знайомий багатьом досвід, коли навчання поступово починає асоціюватися не з відкриттями, а з вимогами, оцінюванням і внутрішньою напругою. Саме тоді мене зацікавило питання, яке згодом визначило значну частину моєї професійної роботи: чому одні люди навчаються із задоволенням, а інші, маючи не менші здібності, швидко втрачають мотивацію?',
+      'У пошуках відповіді я занурилася у вивчення розвитку дітей, формування мовлення, роботи мозку та процесів навчання на різних етапах життя. Спостерігаючи за дітьми, я бачила, наскільки природно вони входять у нову мову: їх не лякають помилки, вони не переживають через рівень, не відкладають практику до кращих часів. Саме тоді я створила Richmond Child — школу ранньої англійської для дітей. Але водночас діти поставили переді мною інше питання: що потрібно змінити, щоб дорослі також могли навчатися без зайвого напруження?',
     ],
     // TODO: photoSrc not set yet -- renders a black placeholder rectangle until the real photo is added.
     photoAlt: 'Засновник на початку шляху',
   },
   {
     kind: 'columns',
-    columns: [
-      { heading: 'Розвиток', paragraphs: ['Перша колонка тексту третього блоку.'] },
-      { heading: 'Виклики', paragraphs: ['Друга колонка тексту третього блоку.'] },
+    heading: 'Те, чого ніхто не врахував',
+    paragraphs: [
+      'З роками я почала помічати закономірність. Підприємці, керівники, фахівці та власники бізнесів часто говорили про англійську однаковими словами: не вистачає часу. Не виходить бути регулярним. Занадто багато разів починав спочатку.',
+      'Щоразу мене дивувало одне й те саме: ці люди успішно реалізовували складні проєкти, керували командами, запускали бізнеси. Проблема була не у відсутності здібностей. Проблема була у форматі. Більшість навчальних програм вимагали від дорослої людини поводитися так, ніби вона має нескінченний запас часу, уваги та енергії. Але реальне життя влаштоване інакше.',
+      '«Іванно, англійська потрібна мені щодня. Але від самої думки про навчання я вже втомився», — сказав мені одного разу один із наших клієнтів. І в цій фразі було набагато більше правди, ніж здається на перший погляд.',
     ],
   },
   {
     kind: 'columns',
-    columns: [
-      { heading: 'Сьогодні', paragraphs: ['Перша колонка тексту четвертого блоку.'] },
-      { heading: 'Плани', paragraphs: ['Друга колонка тексту четвертого блоку.'] },
+    heading: 'Навчання, яке враховує життя',
+    paragraphs: [
+      'Саме тоді почала формуватися ідея The Key. Не як чергової програми чи методики — а як спроба відповісти на просте запитання: як має виглядати навчання для людини, яка вже має насичене життя? Формат, де англійська не конкурує з роботою, сім’єю, відпочинком чи особистими проєктами. Формат, який не вимагає постійно «знаходити час».',
+      'Поступово цей підхід почав працювати. Для когось англійська повернулася через професійні розмови, для когось — через книги та подкасти, подорожі або нові кар’єрні можливості. Але майже завжди зміни починалися в одному місці: зникала напруга. А разом із цим з’являвся простір для природного розвитку.',
+      'Так народився індивідуальний мовний супровід The Key.',
     ],
   },
 ];
@@ -93,10 +109,13 @@ export const AboutFounderCarousel: FC = () => {
               {slide.kind === 'intro' && (
                 <div className={styles.intro}>
                   {slide.heading && <h3 className={styles.heading}>{slide.heading}</h3>}
-                  {slide.paragraphs.map((p, pi) => (
-                    <p key={pi} className={styles.paragraph}>{p}</p>
-                  ))}
-                  {slide.quote && <blockquote className={styles.quote}>{slide.quote}</blockquote>}
+                  {slide.blocks.map((block, bi) =>
+                    block.type === 'quote' ? (
+                      <blockquote key={bi} className={styles.quote}>{block.text}</blockquote>
+                    ) : (
+                      <p key={bi} className={styles.paragraph}>{block.text}</p>
+                    )
+                  )}
                   <button type="button" className={styles.ctaLink} onClick={handleStart}>
                     {slide.cta} <span aria-hidden="true">&#8594;</span>
                   </button>
@@ -122,13 +141,9 @@ export const AboutFounderCarousel: FC = () => {
 
               {slide.kind === 'columns' && (
                 <div className={styles.columns}>
-                  {slide.columns.map((col, ci) => (
-                    <div className={styles.column} key={ci}>
-                      {col.heading && <h4 className={styles.columnHeading}>{col.heading}</h4>}
-                      {col.paragraphs.map((p, pi) => (
-                        <p key={pi} className={styles.paragraph}>{p}</p>
-                      ))}
-                    </div>
+                  {slide.heading && <h3 className={styles.columnsHeading}>{slide.heading}</h3>}
+                  {slide.paragraphs.map((p, pi) => (
+                    <p key={pi} className={styles.paragraph}>{p}</p>
                   ))}
                 </div>
               )}
