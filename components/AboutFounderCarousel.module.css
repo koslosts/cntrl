@@ -2,12 +2,10 @@
   Grid reference (desktop, from the project's Editor):
   12 columns x 100px, 20px gutters, 12 rows.
   Placeholder box measured ~1179x576 -> matches a 10-column span (10*100 + 9*20 = 1180).
-  Font (e-Ukraine Light 16/30) is the page's own default body style and is
-  intentionally NOT set here — only size/line-height are pinned so the
-  component doesn't silently drift if it ever renders outside that cascade.
-  Quote uses Cormorant Garamond 26/30 explicitly, since that's a deliberate
-  accent font, not the page's inherited default -- assumes it's already
-  loaded globally by the page (it's used natively elsewhere on the site).
+  Both fonts (e-Ukraine 16/30 body, Cormorant Garamond 26/30 quote) are
+  self-hosted via next/font in the component and applied via className,
+  not font-family here -- the page's own font loading uses hashed family
+  names that a literal font-family string here wouldn't match.
   letter-spacing 0.3px applies to both fonts, set once here and inherited.
   Tablet/mobile breakpoints: TODO, only a placeholder 780px collapse below
   until real breakpoint values are known.
@@ -75,13 +73,14 @@
   opacity: 0.7;
 }
 
-/* Accent color intentionally left as currentColor -- TODO: swap for the
+/* font-family comes from the next/font className applied alongside this
+   class in the component -- not set here.
+   Accent color intentionally left as currentColor -- TODO: swap for the
    project's real accent token (looked orange/terracotta in the reference). */
 .quote {
   margin: 1em 0;
   padding-left: 1em;
   border-left: 2px solid currentColor;
-  font-family: 'Cormorant Garamond', serif;
   font-size: 26px;
   line-height: 30px;
   font-style: italic;
