@@ -107,6 +107,7 @@
   grid-template-columns: 36.8056vw 36.8056vw; /* 530px 530px */
   gap: 8.3333vw; /* 120px */
   align-items: stretch;
+  justify-content: center; /* center the fixed-width tracks in the now full-bleed (12-col) container */
 }
 
 /* Empty wrapper, so it contributes no intrinsic height to the grid row's
@@ -144,6 +145,9 @@
    magazine layout) with a 120px gutter, matching the photo+text slide's
    530/530/120 proportions. Heading spans both columns. */
 .columns {
+  width: 81.9445vw; /* 2 * 530px + 120px gap, so multicol doesn't stretch to fill the wider container */
+  max-width: 100%;
+  margin: 0 auto; /* center in the now full-bleed (12-col) container */
   column-count: 2;
   column-width: 36.8056vw; /* 530px */
   column-gap: 8.3333vw; /* 120px */
