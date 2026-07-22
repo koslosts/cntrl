@@ -22,6 +22,14 @@ const eUkraine = localFont({
   display: 'swap',
 });
 
+// TEMP: A/B test to figure out why our Light looks heavier than Control's
+// native "e-ukraine" 300 text -- remove this whole block once resolved.
+const eUkraineThinTest = localFont({
+  src: '../fonts/eUkraineThin.otf',
+  weight: '300',
+  display: 'swap',
+});
+
 type IntroBlock =
   | { type: 'paragraph'; text: string }
   | { type: 'quote'; text: string };
@@ -137,6 +145,17 @@ export const AboutFounderCarousel: FC = () => {
                       <p key={bi} className={styles.paragraph}>{block.text}</p>
                     )
                   )}
+                  {/* TEMP font A/B test -- remove once resolved */}
+                  <p className={styles.paragraph}>
+                    ТЕСТ A (self-hosted Light, next/font): Тестовий абзац для порівняння товщини шрифту.
+                  </p>
+                  <p className={`${styles.paragraph} ${eUkraineThinTest.className}`}>
+                    ТЕСТ B (self-hosted Thin, next/font): Тестовий абзац для порівняння товщини шрифту.
+                  </p>
+                  <p className={styles.paragraph} style={{ fontFamily: "'e-ukraine'", fontWeight: 300 }}>
+                    ТЕСТ C (ambient &apos;e-ukraine&apos; 300, без next/font): Тестовий абзац для порівняння товщини шрифту.
+                  </p>
+
                   <button type="button" className={styles.ctaLink} onClick={handleStart}>
                     {slide.cta} <span aria-hidden="true">&#8594;</span>
                   </button>
