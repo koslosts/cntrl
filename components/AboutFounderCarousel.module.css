@@ -108,7 +108,19 @@
   align-items: stretch;
 }
 
+/* Empty wrapper, so it contributes no intrinsic height to the grid row's
+   auto-sizing pass -- the row height comes purely from .photoTextContent,
+   then this wrapper's height: 100% resolves against that, and the
+   absolutely positioned image/placeholder inside fills and crops to it. */
+.photoWrapper {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+}
+
 .photo {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   display: block;
@@ -117,8 +129,8 @@
 
 /* TODO: swap for the real photo once provided. */
 .photoPlaceholder {
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  inset: 0;
   background: #000;
 }
 
