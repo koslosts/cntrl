@@ -1,5 +1,6 @@
 import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { Cormorant_Garamond } from 'next/font/google';
+import localFont from 'next/font/local';
 import styles from './AboutFounderCarousel.module.css';
 
 // Self-hosted via next/font instead of relying on the page's own font
@@ -17,7 +18,18 @@ const cormorantGaramond = Cormorant_Garamond({
 
 // Body text uses the page's own already-loaded "e-ukraine" family directly
 // (set in the CSS module on .root) instead of self-hosting a copy -- an A/B
-// test confirmed the ambient reference matches Control's native rendering.
+// test confirmed the ambient reference matches Control's native rendering
+// on desktop. On mobile the site's own font loading was found to fail
+// site-wide (a Control-platform issue, not this component's), so mobile
+// self-hosts e-Ukraine UltraLight instead of depending on that. Exposed as a
+// CSS variable (not applied directly) so the mobile media query in the CSS
+// module can switch to it -- see `.root` there.
+const eUkraineUltraLight = localFont({
+  src: '../fonts/eUkraineUltraLight.otf',
+  weight: '400',
+  variable: '--font-e-ukraine-ultralight',
+  display: 'swap',
+});
 
 type TextBlock =
   | { type: 'paragraph'; text: string }
@@ -164,7 +176,7 @@ export const AboutFounderCarousel: FC = () => {
   }, [started, handleNext, handlePrev]);
 
   return (
-    <div className={styles.root}>
+    <div className={`${styles.root} ${eUkraineUltraLight.variable}`}>
       <div className={styles.viewport} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
         <div
           className={styles.track}

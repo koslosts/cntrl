@@ -271,6 +271,14 @@
    trimming once this is tested live; the 780px stub this replaces did not
    attempt that fit and was still using the desktop 1440 reference. */
 @media (max-width: 768px) {
+  /* Self-hosted (see eUkraineUltraLight in the component) instead of the
+     desktop's ambient 'e-ukraine' reference, since the site's own mobile
+     font loading was found to fail. */
+  .root {
+    font-family: var(--font-e-ukraine-ultralight);
+    font-weight: 400;
+  }
+
   .paragraph {
     font-size: 2.6667vw; /* 10px */
     line-height: 4.8vw; /* 18px */
