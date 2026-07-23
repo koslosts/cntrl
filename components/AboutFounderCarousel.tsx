@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { Cormorant_Garamond } from 'next/font/google';
 import styles from './AboutFounderCarousel.module.css';
 
@@ -25,7 +25,7 @@ type TextBlock =
 
 type Slide =
   | { kind: 'intro'; heading?: string; blocks: TextBlock[]; cta: string }
-  | { kind: 'photo-text'; heading?: string; paragraphs: string[]; photoSrc?: string; photoAlt: string; photoPosition?: 'left' | 'right'; photoObjectPosition?: string }
+  | { kind: 'photo-text'; heading?: string; paragraphs: string[]; photoSrc?: string; photoAlt: string; photoPosition?: 'left' | 'right'; photoObjectPosition?: string; mobilePhotoSrc?: string }
   | { kind: 'columns'; heading?: string; blocks: TextBlock[]; singleColumn?: boolean };
 
 const SLIDES: Slide[] = [
@@ -85,6 +85,9 @@ const SLIDES: Slide[] = [
     photoSrc: '/38.jpg',
     photoAlt: 'Іванна Кучеренко',
     photoPosition: 'right',
+    // On mobile this is the last slide, so it doubles as the closing visual --
+    // reuses slide 2's photo (book + key) instead of the desktop portrait.
+    mobilePhotoSrc: '/51.jpg',
   },
 ];
 
@@ -123,9 +126,27 @@ export const AboutFounderCarousel: FC = () => {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [started, handlePrev, handleNext]);
 
+  // Swipe (mobile): active once started, mirroring the arrows' availability.
+  const touchStartX = useRef<number | null>(null);
+  const SWIPE_THRESHOLD_PX = 40;
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    if (!started) return;
+    touchStartX.current = e.touches[0].clientX;
+  }, [started]);
+
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+    if (!started || touchStartX.current === null) return;
+    const deltaX = e.changedTouches[0].clientX - touchStartX.current;
+    touchStartX.current = null;
+    if (Math.abs(deltaX) < SWIPE_THRESHOLD_PX) return;
+    if (deltaX < 0) handleNext();
+    else handlePrev();
+  }, [started, handleNext, handlePrev]);
+
   return (
     <div className={styles.root}>
-      <div className={styles.viewport}>
+      <div className={styles.viewport} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
         <div
           className={styles.track}
           style={{ transform: `translateX(-${activeIndex * 100}%)` }}
@@ -166,6 +187,11 @@ export const AboutFounderCarousel: FC = () => {
                       <p key={pi} className={styles.paragraph}>{p}</p>
                     ))}
                   </div>
+                  {/* Mobile-only: shown instead of the desktop photo above (hidden on mobile via CSS). */}
+                  {slide.mobilePhotoSrc && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img className={styles.mobileClosingPhoto} src={slide.mobilePhotoSrc} alt={slide.photoAlt} />
+                  )}
                 </div>
               )}
 
@@ -187,26 +213,39 @@ export const AboutFounderCarousel: FC = () => {
       </div>
 
       {started ? (
-        <div className={styles.arrows}>
-          <button
-            type="button"
-            className={styles.arrowButton}
-            onClick={handlePrev}
-            aria-label={activeIndex <= 1 ? 'Повернутись до "Читати повністю"' : 'Попередній блок'}
-          >
-            &#8592;
-          </button>
-          {activeIndex < SLIDES.length - 1 && (
+        <>
+          <div className={styles.arrows}>
             <button
               type="button"
               className={styles.arrowButton}
-              onClick={handleNext}
-              aria-label="Наступний блок"
+              onClick={handlePrev}
+              aria-label={activeIndex <= 1 ? 'Повернутись до "Читати повністю"' : 'Попередній блок'}
             >
-              &#8594;
+              &#8592;
             </button>
-          )}
-        </div>
+            {activeIndex < SLIDES.length - 1 && (
+              <button
+                type="button"
+                className={styles.arrowButton}
+                onClick={handleNext}
+                aria-label="Наступний блок"
+              >
+                &#8594;
+              </button>
+            )}
+          </div>
+          <div className={styles.dots}>
+            {SLIDES.slice(1).map((_, i) => (
+              <button
+                key={i}
+                type="button"
+                className={`${styles.dot} ${activeIndex === i + 1 ? styles.dotActive : ''}`}
+                onClick={() => goTo(i + 1)}
+                aria-label={`Слайд ${i + 1}`}
+              />
+            ))}
+          </div>
+        </>
       ) : (
         <div className={styles.ctaRow}>
           <button type="button" className={styles.ctaLink} onClick={handleStart}>
