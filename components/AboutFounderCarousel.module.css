@@ -162,7 +162,9 @@
 .photoOnly {
   display: block;
   width: 100%;
-  height: auto;
+  aspect-ratio: 1 / 1; /* source is 1400x2100 (2:3); cropping to 1:1 is 1/3 shorter */
+  object-fit: cover;
+  object-position: top;
 }
 
 .photoTextContent {
