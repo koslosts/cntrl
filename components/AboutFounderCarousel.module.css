@@ -270,8 +270,8 @@
    attempt that fit and was still using the desktop 1440 reference. */
 @media (max-width: 768px) {
   .paragraph {
-    font-size: 4.2667vw; /* 16px */
-    line-height: 8vw; /* 30px */
+    font-size: 1.8667vw; /* 7px */
+    line-height: 3.4667vw; /* 13px -- kept the same ~1.9x ratio as the desktop 16/30; tell me the real value if you have one */
   }
 
   .quote {
