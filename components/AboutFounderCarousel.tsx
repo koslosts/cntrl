@@ -113,6 +113,28 @@ const SLIDES: Slide[] = [
 
 const INTRO_CTA = SLIDES[0].kind === 'intro' ? SLIDES[0].cta : '';
 
+// Mobile-only: slide 3 (SLIDES[2]) is too dense for a single mobile screen,
+// so it splits into two, right after "Проблема була у форматі."
+const MOBILE_SLIDE_3A: Slide = {
+  kind: 'columns',
+  blocks: [
+    { type: 'paragraph', text: 'Але діти поставили переді мною інше питання: що потрібно змінити, щоб дорослі теж могли навчатися без зайвого напруження?' },
+    { type: 'paragraph', text: 'З роками я почала помічати закономірність. Батьки наших учнів, підприємці, керівники, фахівці, експерти та власники бізнесів часто говорили про англійську однаковими словами: не вистачає часу, не виходить бути регулярним, занадто багато разів починав спочатку.' },
+    { type: 'paragraph', text: 'Мені потрібна англійська, але я не хочу перетворювати життя на ще один марафон самовдосконалення — це фраза, яку я чула найчастіше.' },
+    { type: 'paragraph', text: 'Щоразу мене дивувало одне й те саме: ці люди успішно реалізовували складні проєкти, керували командами, запускали бізнеси та освоювали нові професійні сфери. Проблема була не у відсутності здібностей. Проблема була у форматі.' },
+  ],
+};
+
+const MOBILE_SLIDE_3B: Slide = {
+  kind: 'columns',
+  blocks: [
+    { type: 'paragraph', text: 'Більшість навчальних програм вимагали від дорослої людини поводитися так, ніби вона має нескінченний запас часу, уваги та енергії. Але реальне життя влаштоване інакше.' },
+    { type: 'paragraph', text: 'Одного разу один із наших клієнтів сказав мені:' },
+    { type: 'quote', text: '«Іванно, англійська потрібна мені щодня. Але від самої думки про навчання я вже втомився».' },
+    { type: 'paragraph', text: 'І в цій фразі було набагато більше правди, ніж здається на перший погляд.' },
+  ],
+};
+
 export const AboutFounderCarousel: FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [started, setStarted] = useState(false);
@@ -126,7 +148,9 @@ export const AboutFounderCarousel: FC = () => {
     return () => mql.removeEventListener('change', onChange);
   }, []);
 
-  const activeSlides = isMobile ? [...SLIDES, MOBILE_CLOSING_SLIDE] : SLIDES;
+  const activeSlides = isMobile
+    ? [SLIDES[0], SLIDES[1], MOBILE_SLIDE_3A, MOBILE_SLIDE_3B, SLIDES[3], MOBILE_CLOSING_SLIDE]
+    : SLIDES;
 
   const goTo = useCallback((index: number) => {
     setActiveIndex(Math.min(Math.max(index, 0), activeSlides.length - 1));
