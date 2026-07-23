@@ -35,7 +35,7 @@
 .track {
   display: flex;
   width: 100%;
-  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.75s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .slide {
@@ -272,6 +272,10 @@
    trimming once this is tested live; the 780px stub this replaces did not
    attempt that fit and was still using the desktop 1440 reference. */
 @media (max-width: 768px) {
+  .track {
+    transition-duration: 0.35s;
+  }
+
   .paragraph {
     font-size: 2.6667vw; /* 10px */
     line-height: 4.8vw; /* 18px */
