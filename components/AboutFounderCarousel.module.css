@@ -157,10 +157,12 @@
   background: #000;
 }
 
-/* Mobile-only closing photo (see .mobilePhotoSrc in the component) -- hidden
-   on desktop, shown as a normal-flow block below the text on mobile. */
-.mobileClosingPhoto {
-  display: none;
+/* Mobile-only: standalone closing slide (kind: 'photo-only'), never rendered
+   on desktop since it's only added to activeSlides when isMobile is true. */
+.photoOnly {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 .photoTextContent {
@@ -308,8 +310,8 @@
     column-count: 1;
   }
 
-  /* Photos dropped on mobile except where a mobile-specific closing photo
-     is provided (see .mobileClosingPhoto). */
+  /* Photos dropped from slides 2/4 on mobile -- the closing photo lives in
+     its own standalone slide instead (see .photoOnly). */
   .photoWrapper,
   .photoWrapperRight {
     display: none;
@@ -320,15 +322,6 @@
     margin-left: 0;
     margin-right: 0;
     width: 100%;
-  }
-
-  .mobileClosingPhoto {
-    display: block;
-    width: 100%;
-    height: auto;
-    margin-top: 1.5em;
-    object-fit: cover;
-    object-position: top;
   }
 
   /* Swipe replaces arrows; dots replace them as the position indicator. */

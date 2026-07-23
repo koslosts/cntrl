@@ -25,8 +25,19 @@ type TextBlock =
 
 type Slide =
   | { kind: 'intro'; heading?: string; blocks: TextBlock[]; cta: string }
-  | { kind: 'photo-text'; heading?: string; paragraphs: string[]; photoSrc?: string; photoAlt: string; photoPosition?: 'left' | 'right'; photoObjectPosition?: string; mobilePhotoSrc?: string }
-  | { kind: 'columns'; heading?: string; blocks: TextBlock[]; singleColumn?: boolean };
+  | { kind: 'photo-text'; heading?: string; paragraphs: string[]; photoSrc?: string; photoAlt: string; photoPosition?: 'left' | 'right'; photoObjectPosition?: string }
+  | { kind: 'columns'; heading?: string; blocks: TextBlock[]; singleColumn?: boolean }
+  | { kind: 'photo-only'; photoSrc: string; photoAlt: string };
+
+const MOBILE_BREAKPOINT = '(max-width: 768px)';
+
+// Mobile-only: appended as its own swipeable slide after the last desktop
+// slide (not stacked inside slide 4's text) -- reuses slide 2's photo.
+const MOBILE_CLOSING_SLIDE: Slide = {
+  kind: 'photo-only',
+  photoSrc: '/51.jpg',
+  photoAlt: 'The Key',
+};
 
 const SLIDES: Slide[] = [
   {
@@ -85,9 +96,6 @@ const SLIDES: Slide[] = [
     photoSrc: '/38.jpg',
     photoAlt: 'Іванна Кучеренко',
     photoPosition: 'right',
-    // On mobile this is the last slide, so it doubles as the closing visual --
-    // reuses slide 2's photo (book + key) instead of the desktop portrait.
-    mobilePhotoSrc: '/51.jpg',
   },
 ];
 
@@ -96,10 +104,21 @@ const INTRO_CTA = SLIDES[0].kind === 'intro' ? SLIDES[0].cta : '';
 export const AboutFounderCarousel: FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [started, setStarted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mql = window.matchMedia(MOBILE_BREAKPOINT);
+    setIsMobile(mql.matches);
+    const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mql.addEventListener('change', onChange);
+    return () => mql.removeEventListener('change', onChange);
+  }, []);
+
+  const activeSlides = isMobile ? [...SLIDES, MOBILE_CLOSING_SLIDE] : SLIDES;
 
   const goTo = useCallback((index: number) => {
-    setActiveIndex(Math.min(Math.max(index, 0), SLIDES.length - 1));
-  }, []);
+    setActiveIndex(Math.min(Math.max(index, 0), activeSlides.length - 1));
+  }, [activeSlides.length]);
 
   const handleStart = useCallback(() => {
     setStarted(true);
@@ -151,7 +170,7 @@ export const AboutFounderCarousel: FC = () => {
           className={styles.track}
           style={{ transform: `translateX(-${activeIndex * 100}%)` }}
         >
-          {SLIDES.map((slide, i) => (
+          {activeSlides.map((slide, i) => (
             <div className={styles.slide} key={i} aria-hidden={i !== activeIndex}>
               {slide.kind === 'intro' && (
                 <div className={styles.intro}>
@@ -187,11 +206,6 @@ export const AboutFounderCarousel: FC = () => {
                       <p key={pi} className={styles.paragraph}>{p}</p>
                     ))}
                   </div>
-                  {/* Mobile-only: shown instead of the desktop photo above (hidden on mobile via CSS). */}
-                  {slide.mobilePhotoSrc && (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img className={styles.mobileClosingPhoto} src={slide.mobilePhotoSrc} alt={slide.photoAlt} />
-                  )}
                 </div>
               )}
 
@@ -206,6 +220,11 @@ export const AboutFounderCarousel: FC = () => {
                     )
                   )}
                 </div>
+              )}
+
+              {slide.kind === 'photo-only' && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img className={styles.photoOnly} src={slide.photoSrc} alt={slide.photoAlt} />
               )}
             </div>
           ))}
@@ -223,7 +242,7 @@ export const AboutFounderCarousel: FC = () => {
             >
               &#8592;
             </button>
-            {activeIndex < SLIDES.length - 1 && (
+            {activeIndex < activeSlides.length - 1 && (
               <button
                 type="button"
                 className={styles.arrowButton}
@@ -235,7 +254,7 @@ export const AboutFounderCarousel: FC = () => {
             )}
           </div>
           <div className={styles.dots}>
-            {SLIDES.slice(1).map((_, i) => (
+            {activeSlides.slice(1).map((_, i) => (
               <button
                 key={i}
                 type="button"
