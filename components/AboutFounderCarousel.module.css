@@ -98,7 +98,7 @@
 .quote {
   margin: 1em 0;
   padding-left: 1em;
-  border-left: 2px solid #9F5A38;
+  border-left: 1px solid #9F5A38;
   color: #9F5A38;
   font-size: 1.8056vw; /* 26px */
   line-height: 2.0833vw; /* 30px */
@@ -162,7 +162,7 @@
 .photoOnly {
   display: block;
   width: 100%;
-  aspect-ratio: 1 / 1; /* source is 1400x2100 (2:3); cropping to 1:1 is 1/3 shorter */
+  aspect-ratio: 10 / 11; /* source is 1400x2100 (2:3); cropped taller than 1:1 per feedback */
   object-fit: cover;
   object-position: top;
 }
@@ -250,13 +250,12 @@
   padding: 0;
   border: none;
   border-radius: 50%;
-  background: currentColor;
-  opacity: 0.3;
+  background: #C4B8AE; /* warm gray, softer than currentColor which was too dark/high-contrast */
   cursor: pointer;
 }
 
 .dotActive {
-  opacity: 1;
+  background: #9F5A38;
 }
 
 @keyframes fadeIn {
@@ -307,6 +306,15 @@
 
   /* 23px edge margins (from the Editor) on every slide. */
   .slide {
+    padding: 0 6.1333vw;
+  }
+
+  /* .ctaRow sits outside .viewport/.slide (same slot as .arrows/.dots), so it
+     needs the same 23px edge padding applied directly -- otherwise it sits
+     flush to the screen edge while the intro text above it (inside .slide)
+     is indented, making the CTA look shifted out of alignment. */
+  .ctaRow {
+    box-sizing: border-box;
     padding: 0 6.1333vw;
   }
 
