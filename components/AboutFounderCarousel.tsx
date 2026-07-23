@@ -113,6 +113,20 @@ const SLIDES: Slide[] = [
 
 const INTRO_CTA = SLIDES[0].kind === 'intro' ? SLIDES[0].cta : '';
 
+// Mobile-only: adds back a brief sentence trimmed from SLIDES[1] earlier
+// (desktop stays as-is there, since that trim fixed a real overflow issue).
+const MOBILE_SLIDE_2: Slide = {
+  kind: 'photo-text',
+  paragraphs: [
+    'Моє знайомство з англійською почалося дуже рано. Мені було п’ять років, коли мама запросила для мене викладача. Я досі пам’ятаю це відчуття зацікавленості та легкості, з яким чекала кожного заняття.',
+    'Пізніше були школа, університет, професійний розвиток і знайомий багатьом досвід, коли навчання поступово починає асоціюватися не з відкриттями, а з вимогами й внутрішньою напругою. Саме тоді мене зацікавило питання, яке згодом визначило значну частину моєї професійної роботи: чому одні люди навчаються із задоволенням, а інші швидко втрачають мотивацію?',
+    'У пошуках відповіді я занурилася у вивчення розвитку дітей та процесів навчання. Тоді я заснувала школу Richmond Child. Спостерігаючи за дітьми, я бачила, наскільки природно вони входять у нову мову — їх не лякають помилки.',
+  ],
+  photoSrc: '/51.jpg',
+  photoAlt: 'Засновник на початку шляху',
+  photoObjectPosition: 'center',
+};
+
 // Mobile-only: slide 3 (SLIDES[2]) is too dense for a single mobile screen,
 // so it splits into two, right after "Проблема була у форматі."
 const MOBILE_SLIDE_3A: Slide = {
@@ -163,7 +177,7 @@ export const AboutFounderCarousel: FC = () => {
   }, []);
 
   const activeSlides = isMobile
-    ? [SLIDES[0], SLIDES[1], MOBILE_SLIDE_3A, MOBILE_SLIDE_3B, MOBILE_SLIDE_5, MOBILE_CLOSING_SLIDE]
+    ? [SLIDES[0], MOBILE_SLIDE_2, MOBILE_SLIDE_3A, MOBILE_SLIDE_3B, MOBILE_SLIDE_5, MOBILE_CLOSING_SLIDE]
     : SLIDES;
 
   const goTo = useCallback((index: number) => {
