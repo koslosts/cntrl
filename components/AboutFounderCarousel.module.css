@@ -10,10 +10,10 @@
   Grid reference (desktop, from the project's Editor):
   12 columns x 100px, 20px gutters, 12 rows.
   Placeholder box measured ~1179x576 -> matches a 10-column span (10*100 + 9*20 = 1180).
-  Body text uses the page's own already-loaded 'e-ukraine' family directly
-  (an A/B test confirmed the ambient reference renders identically to
-  Control's native text) -- only the quote's Cormorant Garamond is
-  self-hosted via next/font, applied via className in the component.
+  Body text uses the self-hosted e-Ukraine UltraLight font (next/font/local,
+  exposed as a CSS variable on .root) on both desktop and mobile -- the
+  quote's Cormorant Garamond is also self-hosted via next/font, applied via
+  className in the component.
   letter-spacing 0.3px (0.0208vw) applies to both fonts, set once here and inherited.
   Tablet/mobile breakpoints: TODO, only a placeholder 780px collapse below
   until real breakpoint values (and their own vw reference frame) are known.
@@ -22,8 +22,8 @@
 .root {
   width: 100%;
   position: relative;
-  font-family: 'e-ukraine';
-  font-weight: 300;
+  font-family: var(--font-e-ukraine-ultralight);
+  font-weight: 400;
   letter-spacing: 0.0208vw; /* 0.3px */
 }
 
@@ -272,14 +272,6 @@
    trimming once this is tested live; the 780px stub this replaces did not
    attempt that fit and was still using the desktop 1440 reference. */
 @media (max-width: 768px) {
-  /* Self-hosted (see eUkraineUltraLight in the component) instead of the
-     desktop's ambient 'e-ukraine' reference, since the site's own mobile
-     font loading was found to fail. */
-  .root {
-    font-family: var(--font-e-ukraine-ultralight);
-    font-weight: 400;
-  }
-
   .paragraph {
     font-size: 2.6667vw; /* 10px */
     line-height: 4.8vw; /* 18px */

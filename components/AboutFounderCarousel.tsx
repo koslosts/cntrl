@@ -16,14 +16,12 @@ const cormorantGaramond = Cormorant_Garamond({
   display: 'swap',
 });
 
-// Body text uses the page's own already-loaded "e-ukraine" family directly
-// (set in the CSS module on .root) instead of self-hosting a copy -- an A/B
-// test confirmed the ambient reference matches Control's native rendering
-// on desktop. On mobile the site's own font loading was found to fail
-// site-wide (a Control-platform issue, not this component's), so mobile
-// self-hosts e-Ukraine UltraLight instead of depending on that. Exposed as a
-// CSS variable (not applied directly) so the mobile media query in the CSS
-// module can switch to it -- see `.root` there.
+// Self-hosted and applied to .root for both desktop and mobile (see the CSS
+// module), instead of relying on the page's own "e-ukraine" loading -- that
+// was found to fail site-wide on mobile (a Control-platform issue), and
+// using the same self-hosted font on desktop too keeps both breakpoints
+// visually consistent. Exposed as a CSS variable rather than applied via
+// className directly, since .root also needs plain CSS for other rules.
 const eUkraineUltraLight = localFont({
   src: '../fonts/eUkraineUltraLight.otf',
   weight: '400',
