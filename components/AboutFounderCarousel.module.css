@@ -70,14 +70,16 @@
   margin: 0 auto;
 }
 
-/* Sits right under .arrows on the intro slide -- a tighter top margin than
-   .arrows' own, so the two read as one navigation cluster instead of
-   drifting apart. Width/centering matches .intro so it lines up with the
-   intro text above it. */
+/* Overlaid inside .arrows (not stacked under it) so the CTA sits on exactly
+   the same line as the arrows. Width/centering matches .intro so it stays
+   left-aligned with the intro text above it. */
 .ctaRow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   width: 48.6111vw; /* 700px, same as .intro */
   max-width: 100%;
-  margin: 0.75em auto 0;
 }
 
 /* Underlined text link with a trailing arrow, matching the existing
@@ -218,8 +220,10 @@
 }
 
 .arrows {
+  position: relative; /* anchors the absolutely positioned .ctaRow overlay */
   display: flex;
   justify-content: space-between;
+  align-items: center;
   width: 81.9445vw; /* match the 10-col content block, not the full 12-col bleed */
   max-width: 100%;
   margin: 1.5em auto 0;
@@ -320,11 +324,12 @@
     padding: 0 6.1333vw;
   }
 
-  /* .ctaRow sits outside .viewport/.slide (same slot as .arrows/.dots), so it
-     needs the same 23px edge padding applied directly -- otherwise it sits
-     flush to the screen edge while the intro text above it (inside .slide)
-     is indented, making the CTA look shifted out of alignment. */
+  /* No arrows to line up with on mobile, so it drops out of the overlay
+     positioning and flows normally -- with the same 23px edge padding as
+     .slide, so it stays aligned with the intro text above it. */
   .ctaRow {
+    position: static;
+    transform: none;
     box-sizing: border-box;
     padding: 0 6.1333vw;
   }
@@ -356,8 +361,14 @@
   }
 
   /* Swipe replaces arrows; dots replace them as the position indicator. */
-  .arrows {
+  /* Swipe replaces the arrows on mobile, but the row itself has to stay --
+     it wraps the CTA. Hiding the buttons alone collapses it to nothing. */
+  .arrowButton {
     display: none;
+  }
+
+  .arrows {
+    display: block;
   }
 
   .dots {
