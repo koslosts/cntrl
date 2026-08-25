@@ -29,14 +29,6 @@ const eUkraineUltraLight = localFont({
   display: 'swap',
 });
 
-// Mobile-only, slightly bolder than the UltraLight above -- switched in via
-// the mobile media query in the CSS module (see `.root` there).
-const eUkraineLight = localFont({
-  src: '../fonts/eUkraineLight.otf',
-  weight: '400',
-  variable: '--font-e-ukraine-light',
-  display: 'swap',
-});
 
 type TextBlock =
   | { type: 'paragraph'; text: string }
@@ -216,7 +208,7 @@ export const AboutFounderCarousel: FC = () => {
   }, [started, handleNext, handlePrev]);
 
   return (
-    <div className={`${styles.root} ${eUkraineUltraLight.variable} ${eUkraineLight.variable}`}>
+    <div className={`${styles.root} ${eUkraineUltraLight.variable}`}>
       <div className={styles.viewport} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
         <div
           className={styles.track}

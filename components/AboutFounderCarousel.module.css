@@ -294,9 +294,7 @@
     font-size: 4.8vw; /* 18px */
   }
 
-  /* Slightly bolder than the desktop UltraLight, per feedback. */
   .root {
-    font-family: var(--font-e-ukraine-light);
     letter-spacing: 0.08vw; /* 0.3px */
   }
 
