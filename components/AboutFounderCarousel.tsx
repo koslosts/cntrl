@@ -11,7 +11,7 @@ import styles from './AboutFounderCarousel.module.css';
 // we need actual font files (next/font/local) instead of next/font/google.
 const cormorantGaramond = Cormorant_Garamond({
   subsets: ['latin', 'cyrillic'],
-  weight: '300',
+  weight: '600',
   style: 'italic',
   display: 'swap',
 });
@@ -90,12 +90,12 @@ const SLIDES: Slide[] = [
       { type: 'paragraph', text: 'Більшість програм вимагають від дорослих поводитися так, ніби вони мають нескінченний запас часу й енергії. Але реальність інша. Одного разу наш клієнт сказав:' },
       { type: 'quote', text: '«Іванно, англійська потрібна мені щодня. Але від самої думки про чергове навчання я вже втомився».' },
       { type: 'paragraph', text: 'І в цій фразі було набагато більше правди, ніж здається на перший погляд.' },
-      { type: 'paragraph', text: 'Саме тоді почала формуватися ідея The Key — спроба відповісти на запитання: як має виглядати навчання для людини з насиченим життям?' },
     ],
   },
   {
     kind: 'photo-text',
     paragraphs: [
+      'Саме тоді почала формуватися ідея The Key — спроба відповісти на запитання: як має виглядати навчання для людини з насиченим життям?',
       'Мені хотілося створити формат, де англійська не конкурує з роботою чи відпочинком і не вимагає постійно «знаходити час», а враховує реальний ритм людини.',
       'Поступово підхід запрацював — зникла напруга, з’явилися комфорт, цікавість і вибір. З’явився простір для розвитку, а мова стала тихою розкішшю.',
       'Запрошую Вас отримати свій персональний ключ.',
@@ -117,25 +117,24 @@ const MOBILE_SLIDE_3A: Slide = {
     { type: 'paragraph', text: 'На цій філософії занурення я створила Richmond Child Early English at home — школу англійської для дітей. Але згодом виникло інше питання: як повернути цю легкість дорослим людям?' },
     { type: 'paragraph', text: 'З роками я помітила чітку закономірність. Топменеджери, підприємці та лідери думок часто скаржилися на одне й те саме: брак часу, відсутність регулярності та нескінченні спроби почати спочатку.' },
     { type: 'paragraph', text: '«Мені потрібна англійська, але я не хочу перетворювати своє життя на ще один марафон самовдосконалення» — це фраза, яку я чула найчастіше від клієнтів.' },
+    { type: 'paragraph', text: '«Ці люди успішно реалізовували масштабні проєкти, керували компаніями й запускали бізнеси. Проблема була не у відсутності здібностей чи сили волі, а у форматі».' },
   ],
 };
 
 const MOBILE_SLIDE_3B: Slide = {
   kind: 'columns',
   blocks: [
-    { type: 'paragraph', text: '«Ці люди успішно реалізовували масштабні проєкти, керували компаніями й запускали бізнеси. Проблема була не у відсутності здібностей чи сили волі, а у форматі».' },
     { type: 'paragraph', text: 'Більшість програм вимагають від дорослих поводитися так, ніби вони мають нескінченний запас часу й енергії. Але реальність інша. Одного разу наш клієнт сказав:' },
     { type: 'quote', text: '«Іванно, англійська потрібна мені щодня. Але від самої думки про чергове навчання я вже втомився».' },
     { type: 'paragraph', text: 'І в цій фразі було набагато більше правди, ніж здається на перший погляд.' },
-    { type: 'paragraph', text: 'Саме тоді почала формуватися ідея The Key — спроба відповісти на запитання: як має виглядати навчання для людини з насиченим життям?' },
   ],
 };
 
-// Mobile-only: shorter version of SLIDES[3], since its first paragraph moved
-// into MOBILE_SLIDE_3B above.
+// Mobile-only: mirrors SLIDES[3] in full.
 const MOBILE_SLIDE_5: Slide = {
   kind: 'photo-text',
   paragraphs: [
+    'Саме тоді почала формуватися ідея The Key — спроба відповісти на запитання: як має виглядати навчання для людини з насиченим життям?',
     'Мені хотілося створити формат, де англійська не конкурує з роботою чи відпочинком і не вимагає постійно «знаходити час», а враховує реальний ритм людини.',
     'Поступово підхід запрацював — зникла напруга, з’явилися комфорт, цікавість і вибір. З’явився простір для розвитку, а мова стала тихою розкішшю.',
     'Запрошую Вас отримати свій персональний ключ.',
@@ -148,7 +147,6 @@ const MOBILE_SLIDE_5: Slide = {
 
 export const AboutFounderCarousel: FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [started, setStarted] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -167,48 +165,34 @@ export const AboutFounderCarousel: FC = () => {
     setActiveIndex(Math.min(Math.max(index, 0), activeSlides.length - 1));
   }, [activeSlides.length]);
 
-  const handleStart = useCallback(() => {
-    setStarted(true);
-    goTo(1);
-  }, [goTo]);
-
-  const handlePrev = useCallback(() => {
-    if (activeIndex <= 1) {
-      setStarted(false);
-      goTo(0);
-      return;
-    }
-    goTo(activeIndex - 1);
-  }, [activeIndex, goTo]);
+  const handlePrev = useCallback(() => goTo(activeIndex - 1), [activeIndex, goTo]);
   const handleNext = useCallback(() => goTo(activeIndex + 1), [activeIndex, goTo]);
 
   useEffect(() => {
-    if (!started) return;
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft') handlePrev();
       if (e.key === 'ArrowRight') handleNext();
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [started, handlePrev, handleNext]);
+  }, [handlePrev, handleNext]);
 
-  // Swipe (mobile): active once started, mirroring the arrows' availability.
+  // Swipe (mobile): active on every slide, including the intro.
   const touchStartX = useRef<number | null>(null);
   const SWIPE_THRESHOLD_PX = 40;
 
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
-    if (!started) return;
     touchStartX.current = e.touches[0].clientX;
-  }, [started]);
+  }, []);
 
   const handleTouchEnd = useCallback((e: React.TouchEvent) => {
-    if (!started || touchStartX.current === null) return;
+    if (touchStartX.current === null) return;
     const deltaX = e.changedTouches[0].clientX - touchStartX.current;
     touchStartX.current = null;
     if (Math.abs(deltaX) < SWIPE_THRESHOLD_PX) return;
     if (deltaX < 0) handleNext();
     else handlePrev();
-  }, [started, handleNext, handlePrev]);
+  }, [handleNext, handlePrev]);
 
   return (
     <div className={`${styles.root} ${eUkraineUltraLight.variable}`}>
@@ -287,43 +271,45 @@ export const AboutFounderCarousel: FC = () => {
         </div>
       </div>
 
-      {started ? (
-        <>
-          <div className={styles.arrows}>
+      <div className={styles.arrows}>
+        <button
+          type="button"
+          className={styles.arrowButton}
+          onClick={handlePrev}
+          disabled={activeIndex === 0}
+          aria-label="Попередній блок"
+        >
+          &#8592;
+        </button>
+        {activeIndex < activeSlides.length - 1 && (
+          <button
+            type="button"
+            className={styles.arrowButton}
+            onClick={handleNext}
+            aria-label="Наступний блок"
+          >
+            &#8594;
+          </button>
+        )}
+      </div>
+
+      {activeIndex >= 1 && (
+        <div className={styles.dots}>
+          {activeSlides.slice(1).map((_, i) => (
             <button
+              key={i}
               type="button"
-              className={styles.arrowButton}
-              onClick={handlePrev}
-              aria-label={activeIndex <= 1 ? 'Повернутись до "Читати повністю"' : 'Попередній блок'}
-            >
-              &#8592;
-            </button>
-            {activeIndex < activeSlides.length - 1 && (
-              <button
-                type="button"
-                className={styles.arrowButton}
-                onClick={handleNext}
-                aria-label="Наступний блок"
-              >
-                &#8594;
-              </button>
-            )}
-          </div>
-          <div className={styles.dots}>
-            {activeSlides.slice(1).map((_, i) => (
-              <button
-                key={i}
-                type="button"
-                className={`${styles.dot} ${activeIndex === i + 1 ? styles.dotActive : ''}`}
-                onClick={() => goTo(i + 1)}
-                aria-label={`Слайд ${i + 1}`}
-              />
-            ))}
-          </div>
-        </>
-      ) : (
+              className={`${styles.dot} ${activeIndex === i + 1 ? styles.dotActive : ''}`}
+              onClick={() => goTo(i + 1)}
+              aria-label={`Слайд ${i + 1}`}
+            />
+          ))}
+        </div>
+      )}
+
+      {activeIndex === 0 && (
         <div className={styles.ctaRow}>
-          <button type="button" className={styles.ctaLink} onClick={handleStart}>
+          <button type="button" className={styles.ctaLink} onClick={() => goTo(1)}>
             {INTRO_CTA} <span aria-hidden="true">&#8594;</span>
           </button>
         </div>
