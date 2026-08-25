@@ -334,7 +334,7 @@ export const AboutFounderCarousel: FC = () => {
       <div className={styles.arrows}>
         <button
           type="button"
-          className={styles.arrowButton}
+          className={activeIndex === 0 ? `${styles.arrowButton} ${styles.arrowButtonHidden}` : styles.arrowButton}
           onClick={handlePrev}
           disabled={activeIndex === 0}
           aria-label="Попередній блок"

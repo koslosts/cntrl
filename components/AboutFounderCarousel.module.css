@@ -243,6 +243,13 @@
   cursor: default;
 }
 
+/* Fully hidden rather than grayed-out, e.g. the prev arrow on the first
+   slide -- visibility:hidden (not display:none) so it still reserves its
+   spot and the other arrow doesn't jump across the row's space-between. */
+.arrowButtonHidden {
+  visibility: hidden;
+}
+
 .arrowButton:not(:disabled):hover {
   opacity: 0.7;
 }
