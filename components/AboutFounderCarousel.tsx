@@ -36,7 +36,7 @@ type TextBlock =
 
 type Slide =
   | { kind: 'intro'; heading?: string; blocks: TextBlock[]; cta: string }
-  | { kind: 'photo-text'; heading?: string; paragraphs: string[]; photoSrc?: string; photoAlt: string; photoPosition?: 'left' | 'right'; photoObjectPosition?: string }
+  | { kind: 'photo-text'; heading?: string; paragraphs: string[]; photoSrc?: string; photoAlt: string; photoPosition?: 'left' | 'right'; photoObjectPosition?: string; emphasisLast?: boolean }
   | { kind: 'columns'; heading?: string; blocks: TextBlock[]; singleColumn?: boolean }
   | { kind: 'photo-only'; photoSrc: string; photoAlt: string };
 
@@ -103,6 +103,7 @@ const SLIDES: Slide[] = [
     photoSrc: '/38.jpg',
     photoAlt: 'Іванна Кучеренко',
     photoPosition: 'right',
+    emphasisLast: true,
   },
 ];
 
@@ -136,11 +137,13 @@ const MOBILE_SLIDE_5: Slide = {
   kind: 'photo-text',
   paragraphs: [
     'Мені хотілося створити формат, де англійська не конкурує з роботою чи відпочинком і не вимагає постійно «знаходити час», а враховує реальний ритм людини.',
-    'Поступово підхід запрацював — зникла напруга, з’явилися комфорт, цікавість і вибір. З’явився простір для розвитку, а мова стала тихою розкішшю. Запрошую Вас отримати свій персональний ключ.',
+    'Поступово підхід запрацював — зникла напруга, з’явилися комфорт, цікавість і вибір. З’явився простір для розвитку, а мова стала тихою розкішшю.',
+    'Запрошую Вас отримати свій персональний ключ.',
   ],
   photoSrc: '/38.jpg',
   photoAlt: 'Іванна Кучеренко',
   photoPosition: 'right',
+  emphasisLast: true,
 };
 
 export const AboutFounderCarousel: FC = () => {
@@ -247,7 +250,16 @@ export const AboutFounderCarousel: FC = () => {
                   <div className={slide.photoPosition === 'right' ? styles.photoTextContentRight : styles.photoTextContent}>
                     {slide.heading && <h3 className={styles.heading}>{slide.heading}</h3>}
                     {slide.paragraphs.map((p, pi) => (
-                      <p key={pi} className={styles.paragraph}>{p}</p>
+                      <p
+                        key={pi}
+                        className={
+                          slide.emphasisLast && pi === slide.paragraphs.length - 1
+                            ? `${styles.paragraph} ${styles.paragraphEmphasis}`
+                            : styles.paragraph
+                        }
+                      >
+                        {p}
+                      </p>
                     ))}
                   </div>
                 </div>

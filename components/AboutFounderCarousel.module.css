@@ -56,6 +56,12 @@
   text-align: left;
 }
 
+/* Closing invitation line on the last slide -- browser-synthesized bold,
+   since the self-hosted UltraLight/Light files only ship one weight. */
+.paragraphEmphasis {
+  font-weight: 700;
+}
+
 /* Slide 0 (intro): 700px text block (6 cols), centered in the placeholder. */
 .intro {
   width: 48.6111vw; /* 700px */
