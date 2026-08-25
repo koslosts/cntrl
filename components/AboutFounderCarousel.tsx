@@ -345,7 +345,9 @@ export const AboutFounderCarousel: FC = () => {
         >
           &#8592;
         </button>
-        {activeIndex < activeSlides.length - 1 && (
+        {/* Hidden on the intro slide too -- the CTA there already carries its
+            own arrow, so a second one would be redundant. */}
+        {activeIndex > 0 && activeIndex < activeSlides.length - 1 && (
           <button
             type="button"
             className={styles.arrowButton}
