@@ -9,9 +9,12 @@ import styles from './AboutFounderCarousel.module.css';
 // CAVEAT: Google's Cormorant Garamond may not ship Cyrillic glyphs -- if the
 // Ukrainian quote text still falls back to a system serif after this change,
 // we need actual font files (next/font/local) instead of next/font/google.
+// Both weights loaded so CSS can switch between them per breakpoint (300 on
+// desktop, 600 -- slightly bolder -- on mobile only, see `.quote` in the CSS
+// module).
 const cormorantGaramond = Cormorant_Garamond({
   subsets: ['latin', 'cyrillic'],
-  weight: '600',
+  weight: ['300', '600'],
   style: 'italic',
   display: 'swap',
 });

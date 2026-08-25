@@ -106,6 +106,7 @@
   padding-left: 1em;
   border-left: 1px solid #9F5A38;
   color: #9F5A38;
+  font-weight: 300;
   font-size: 1.8056vw; /* 26px */
   line-height: 2.0833vw; /* 30px */
   font-style: italic;
@@ -288,6 +289,7 @@
   }
 
   .quote {
+    font-weight: 600;
     font-size: 4.8vw; /* 18px */
     line-height: 5.3333vw; /* 20px */
   }
