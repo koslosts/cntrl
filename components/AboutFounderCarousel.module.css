@@ -69,13 +69,14 @@
   margin: 0 auto;
 }
 
-/* Sits in the same slot as .arrows (right after .viewport, same margin-top)
-   so the CTA and the arrows land at an identical vertical position --
-   width/centering matches .intro so it lines up with the intro text above it. */
+/* Sits right under .arrows on the intro slide -- a tighter top margin than
+   .arrows' own, so the two read as one navigation cluster instead of
+   drifting apart. Width/centering matches .intro so it lines up with the
+   intro text above it. */
 .ctaRow {
   width: 48.6111vw; /* 700px, same as .intro */
   max-width: 100%;
-  margin: 1.5em auto 0;
+  margin: 0.75em auto 0;
 }
 
 /* Underlined text link with a trailing arrow, matching the existing
