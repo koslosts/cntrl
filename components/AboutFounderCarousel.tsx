@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useRef, useState } from 'react';
+import { FC, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Cormorant_Garamond } from 'next/font/google';
 import localFont from 'next/font/local';
 import styles from './AboutFounderCarousel.module.css';
@@ -181,9 +181,35 @@ export const AboutFounderCarousel: FC = () => {
     return () => mql.removeEventListener('change', onChange);
   }, []);
 
-  const activeSlides = isMobile
-    ? [MOBILE_SLIDE_1, SLIDES[1], MOBILE_SLIDE_3A, MOBILE_SLIDE_3B, MOBILE_SLIDE_5, MOBILE_CLOSING_SLIDE]
-    : SLIDES;
+  const activeSlides = useMemo(
+    () =>
+      isMobile
+        ? [MOBILE_SLIDE_1, SLIDES[1], MOBILE_SLIDE_3A, MOBILE_SLIDE_3B, MOBILE_SLIDE_5, MOBILE_CLOSING_SLIDE]
+        : SLIDES,
+    [isMobile]
+  );
+
+  // All slides share one flex row (the sliding filmstrip), so without this
+  // .viewport would stay as tall as the tallest slide even while showing a
+  // much shorter one, leaving the arrows/CTA stranded far below the visible
+  // text. Measuring the active slide directly and setting .viewport's height
+  // explicitly keeps it snug to whatever is actually on screen.
+  const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [viewportHeight, setViewportHeight] = useState<number>();
+
+  const measureHeight = useCallback(() => {
+    const el = slideRefs.current[activeIndex];
+    if (el) setViewportHeight(el.scrollHeight);
+  }, [activeIndex]);
+
+  useLayoutEffect(() => {
+    measureHeight();
+  }, [measureHeight, activeSlides]);
+
+  useEffect(() => {
+    window.addEventListener('resize', measureHeight);
+    return () => window.removeEventListener('resize', measureHeight);
+  }, [measureHeight]);
 
   const goTo = useCallback((index: number) => {
     setActiveIndex(Math.min(Math.max(index, 0), activeSlides.length - 1));
@@ -220,13 +246,23 @@ export const AboutFounderCarousel: FC = () => {
 
   return (
     <div className={`${styles.root} ${eUkraineUltraLight.variable}`}>
-      <div className={styles.viewport} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+      <div
+        className={styles.viewport}
+        style={viewportHeight ? { height: viewportHeight } : undefined}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
         <div
           className={styles.track}
           style={{ transform: `translateX(-${activeIndex * 100}%)` }}
         >
           {activeSlides.map((slide, i) => (
-            <div className={styles.slide} key={i} aria-hidden={i !== activeIndex}>
+            <div
+              className={styles.slide}
+              key={i}
+              aria-hidden={i !== activeIndex}
+              ref={(el) => { slideRefs.current[i] = el; }}
+            >
               {slide.kind === 'intro' && (
                 <div className={styles.intro}>
                   {slide.heading && <h3 className={styles.heading}>{slide.heading}</h3>}
