@@ -277,26 +277,26 @@
   }
 
   .paragraph {
-    font-size: 2.6667vw; /* 10px */
-    line-height: 4.8vw; /* 18px */
+    font-size: 2.9333vw; /* 11px */
+    line-height: 5.3333vw; /* 20px */
   }
 
-  /* Scaled down proportionally with .paragraph (was 26/16 = 1.625x the body
-     size, kept that ratio: 10 * 1.625 ≈ 16px). */
   .quote {
-    font-size: 4.2667vw; /* 16px */
-    line-height: 4.8vw; /* 18px */
+    font-size: 4.8vw; /* 18px */
+    line-height: 5.3333vw; /* 20px */
   }
 
   .ctaLink {
-    font-size: 3.2vw; /* 12px */
+    font-size: 3.4667vw; /* 13px */
   }
 
   .arrowButton {
     font-size: 4.8vw; /* 18px */
   }
 
+  /* Slightly bolder than the desktop UltraLight, per feedback. */
   .root {
+    font-family: var(--font-e-ukraine-light);
     letter-spacing: 0.08vw; /* 0.3px */
   }
 
