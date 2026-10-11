@@ -57,12 +57,6 @@
   text-align: left;
 }
 
-/* Closing invitation line on the last slide -- browser-synthesized bold,
-   since the self-hosted UltraLight/Light files only ship one weight. */
-.paragraphEmphasis {
-  font-weight: 700;
-}
-
 /* Slide 0 (intro): 700px text block (6 cols), centered in the placeholder. */
 .intro {
   width: 48.6111vw; /* 700px */
@@ -168,12 +162,21 @@
   background: #000;
 }
 
-/* Mobile-only: standalone closing slide (kind: 'photo-only'), never rendered
-   on desktop since it's only added to activeSlides when isMobile is true. */
+/* Closing slide (kind: 'photo-only'). On desktop the photo sits in the same
+   left-hand 530px column the photos on the photo+text slides occupy, so it
+   lines up with the rest of the deck; its height matches the tallest text
+   slide so the section doesn't jump. Mobile overrides this to full width
+   below. */
+.photoOnlyRow {
+  width: 81.9445vw; /* same 10-col block as .photoText / .columns */
+  max-width: 100%;
+  margin: 0 auto;
+}
+
 .photoOnly {
   display: block;
-  width: 100%;
-  aspect-ratio: 10 / 11; /* source is 1400x2100 (2:3); cropped taller than 1:1 per feedback */
+  width: 36.8056vw; /* 530px */
+  height: 34.0278vw; /* 490px */
   object-fit: cover;
   object-position: top;
 }
@@ -338,12 +341,21 @@
   .ctaRow,
   .photoText,
   .columns,
-  .columnsSingle {
+  .columnsSingle,
+  .photoOnlyRow {
     width: 100%;
   }
 
   .columns {
     column-count: 1;
+  }
+
+  /* Closing photo spans the full slide width here, instead of the desktop's
+     left-hand 530px column. */
+  .photoOnly {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 10 / 11;
   }
 
   /* Photos dropped from slides 2/4 on mobile -- the closing photo lives in
