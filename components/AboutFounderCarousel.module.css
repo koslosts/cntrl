@@ -372,15 +372,21 @@
     width: 100%;
   }
 
-  /* Swipe replaces arrows; dots replace them as the position indicator. */
   /* Swipe replaces the arrows on mobile, but the row itself has to stay --
-     it wraps the CTA. Hiding the buttons alone collapses it to nothing. */
+     it wraps the CTA. Hiding the buttons alone collapses it to nothing.
+     Full width here (not the desktop 10-col block, which would centre the
+     row and push the CTA ~34px right of the text column), and a tighter top
+     margin so the CTA sits closer to the intro text. On the other slides the
+     row is empty, so this margin collapses into the dots' own 1.5em and
+     nothing moves. */
   .arrowButton {
     display: none;
   }
 
   .arrows {
     display: block;
+    width: 100%;
+    margin-top: 0.5em;
   }
 
   .dots {
