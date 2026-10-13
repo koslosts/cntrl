@@ -372,11 +372,25 @@
 
   /* Closing photo spans the full slide width here, instead of the desktop's
      left-hand 530px column, and is squarer than before to leave room for the
-     invitation line underneath it. */
+     invitation line underneath it. The crop sits mid-frame rather than flush
+     to the top, which lifts the visible area ~80px so the key clears the
+     bottom edge. */
   .photoOnly {
     width: 100%;
     height: auto;
     aspect-ratio: 1 / 1;
+    object-position: center;
+  }
+
+  /* A blank line between the photo and the invitation under it. */
+  .photoOnly + .paragraph {
+    margin-top: 8.2667vw; /* 31px = 11px gap + one 20px line */
+  }
+
+  /* The intro has room to spare, so its quote breathes a line wider than the
+     1em the denser slides can afford. */
+  .intro .quote {
+    margin: 9.8667vw 0; /* 37px = 17px + one 20px line */
   }
 
   /* Photos dropped from slides 2/4 on mobile -- the closing photo lives in
