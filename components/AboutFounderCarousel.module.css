@@ -57,6 +57,12 @@
   text-align: left;
 }
 
+/* Closing invitation line -- browser-synthesized bold, since the self-hosted
+   e-Ukraine file only ships one weight. */
+.paragraphEmphasis {
+  font-weight: 700;
+}
+
 /* Slide 0 (intro): 700px text block (6 cols), centered in the placeholder. */
 .intro {
   width: 48.6111vw; /* 700px */
@@ -208,12 +214,21 @@
   column-gap: 8.3333vw; /* 120px */
 }
 
-/* Single-column variant (e.g. slide 4): like .intro, but a bit wider --
-   8 cols (940px) vs .intro's 6 cols (700px). */
+/* Single-column variant (the closing block): like .intro, but wider -- 8 cols
+   (940px) vs .intro's 6 cols (700px), so a longer block stays within the
+   section instead of running past it. */
 .columnsSingle {
-  width: 48.6111vw; /* 700px, same as .intro (6 cols) */
+  width: 65.2778vw; /* 940px (8 cols) */
   max-width: 100%;
   margin: 0 auto;
+}
+
+/* Same trailing-margin trim the photo+text column gets, so a block ends at
+   its last line rather than a line-and-a-half later. */
+.intro > *:last-child,
+.columns > *:last-child,
+.columnsSingle > *:last-child {
+  margin-bottom: 0;
 }
 
 .columnsHeading {
@@ -304,7 +319,11 @@
     line-height: 5.3333vw; /* 20px */
   }
 
+  /* Tighter vertical margins than the desktop's 1em: at 18px the quote is the
+     tallest thing on a mobile slide, and the full margin pushed the block past
+     the section. */
   .quote {
+    margin: 0.6em 0;
     font-weight: 600;
     font-size: 4.8vw; /* 18px */
     line-height: 5.3333vw; /* 20px */

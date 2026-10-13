@@ -34,16 +34,33 @@ const eUkraineUltraLight = localFont({
 
 
 type TextBlock =
-  | { type: 'paragraph'; text: string }
+  | { type: 'paragraph'; text: string; emphasis?: boolean }
   | { type: 'quote'; text: string };
 
 type Slide =
   | { kind: 'intro'; heading?: string; blocks: TextBlock[]; cta: string }
-  | { kind: 'photo-text'; heading?: string; paragraphs: string[]; photoSrc?: string; photoAlt: string; photoPosition?: 'left' | 'right'; photoObjectPosition?: string }
+  | { kind: 'photo-text'; heading?: string; blocks: TextBlock[]; photoSrc?: string; photoAlt: string; photoPosition?: 'left' | 'right'; photoObjectPosition?: string }
   | { kind: 'columns'; heading?: string; blocks: TextBlock[]; singleColumn?: boolean }
   | { kind: 'photo-only'; photoSrc: string; photoAlt: string };
 
 const MOBILE_BREAKPOINT = '(max-width: 768px)';
+
+// Every slide kind lays its copy out the same way, so they all go through
+// this: quotes get the serif italic treatment, paragraphs can opt into the
+// heavier closing-line weight.
+const renderBlocks = (blocks: TextBlock[]) =>
+  blocks.map((block, i) =>
+    block.type === 'quote' ? (
+      <blockquote key={i} className={`${styles.quote} ${cormorantGaramond.className}`}>{block.text}</blockquote>
+    ) : (
+      <p
+        key={i}
+        className={block.emphasis ? `${styles.paragraph} ${styles.paragraphEmphasis}` : styles.paragraph}
+      >
+        {block.text}
+      </p>
+    )
+  );
 
 // Mobile keeps its own closing photo (the book-and-key shot from slide 2),
 // since the portrait that closes the desktop deck is hidden on mobile along
@@ -52,6 +69,39 @@ const MOBILE_CLOSING_SLIDE: Slide = {
   kind: 'photo-only',
   photoSrc: '/51.jpg',
   photoAlt: 'The Key',
+};
+
+// Mobile-only: the closing block runs ~490px of copy at 375px, well past the
+// fixed section, so it splits in two the way the dense middle block used to.
+const MOBILE_CLOSING_A: Slide = {
+  kind: 'columns',
+  singleColumn: true,
+  blocks: [
+    { type: 'paragraph', text: 'The Key — це не стандартні курси англійської чи набір готових уроків. Це не групові або класичні індивідуальні заняття з вчителем. Це також не школа у звичному розумінні, де доводиться підлаштовуватися під систему. Навпаки — це простір, де англійська не конкурує з вашим життям, а стає його природною частиною.' },
+    { type: 'paragraph', text: 'Я впевнена, що англійська може приносити таке ж задоволення, як ранкова кава, улюблений подкаст за кермом чи вечір із книгою біля каміна.' },
+  ],
+};
+
+const MOBILE_CLOSING_B: Slide = {
+  kind: 'columns',
+  singleColumn: true,
+  blocks: [
+    { type: 'paragraph', text: 'Коли процес будується навколо вашого часу, інтересів, комфорту і вибору — внутрішній опір і напруга зникають, натомість з’являється стійкий результат. Мова стає тим, чим і має бути, — простором свободи і вашою тихою розкішшю.' },
+    { type: 'quote', text: 'The Key — це персональний мовний супровід, який робить англійську природною частиною вашого життя.' },
+    { type: 'paragraph', text: 'Запрошую Вас отримати свій персональний ключ.', emphasis: true },
+  ],
+};
+
+const CLOSING_BLOCK: Slide = {
+  kind: 'columns',
+  singleColumn: true,
+  blocks: [
+    { type: 'paragraph', text: 'The Key — це не стандартні курси англійської чи набір готових уроків. Це не групові або класичні індивідуальні заняття з вчителем. Це також не школа у звичному розумінні, де доводиться підлаштовуватися під систему. Навпаки — це простір, де англійська не конкурує з вашим життям, а стає його природною частиною.' },
+    { type: 'paragraph', text: 'Я впевнена, що англійська може приносити таке ж задоволення, як ранкова кава, улюблений подкаст за кермом чи вечір із книгою біля каміна.' },
+    { type: 'paragraph', text: 'Коли процес будується навколо вашого часу, інтересів, комфорту і вибору — внутрішній опір і напруга зникають, натомість з’являється стійкий результат. Мова стає тим, чим і має бути, — простором свободи і вашою тихою розкішшю.' },
+    { type: 'quote', text: 'The Key — це персональний мовний супровід, який робить англійську природною частиною вашого життя.' },
+    { type: 'paragraph', text: 'Запрошую Вас отримати свій персональний ключ.', emphasis: true },
+  ],
 };
 
 const SLIDES: Slide[] = [
@@ -79,29 +129,30 @@ const SLIDES: Slide[] = [
   },
   {
     kind: 'photo-text',
-    paragraphs: [
-      'Моє знайомство з англійською почалося в п’ять років, коли мама запросила для мене вчителя. Я досі пам’ятаю це відчуття цікавості та легкості, з яким чекала кожного заняття.',
-      'Пізніше були школа, університет і знайомий багатьом досвід, коли навчання асоціюється не з відкриттями, а з вимогами й внутрішньою напругою. Саме тоді мене зацікавило питання: чому одні люди навчаються із задоволенням, а інші швидко втрачають мотивацію?',
-      'У пошуках відповіді я занурилася у вивчення психофізіології, роботи мозку й процесів навчання на різних етапах життя. Спостерігаючи за дітьми, я бачила, як природно вони взаємодіють із мовою: не бояться помилок, не переживають через рівень і не відкладають практику до кращих часів.',
+    blocks: [
+      { type: 'paragraph', text: 'Моє знайомство з англійською почалося у п’ять років, коли мама запросила для мене вчителя. Я досі пам’ятаю це відчуття цікавості та легкості, з яким чекала кожного заняття.' },
+      { type: 'paragraph', text: 'Пізніше були школа, університет і знайомий багатьом досвід, коли навчання асоціюється не з відкриттями, а з вимогами й внутрішньою напругою. Саме тоді мене зацікавило питання: чому одні люди навчаються із задоволенням, а інші швидко втрачають мотивацію?' },
+      { type: 'paragraph', text: 'У пошуках відповіді я занурилася у вивчення психофізіології, роботи мозку й процесів навчання на різних етапах життя. Спостерігаючи за дітьми, я бачила, як природно вони взаємодіють із мовою: не бояться помилок, не переживають через рівень і не відкладають практику до кращих часів.' },
     ],
     photoSrc: '/51.jpg',
     photoAlt: 'Засновник на початку шляху',
     photoObjectPosition: 'center',
   },
-  // Closing slide: the text runs in a single column and the portrait takes the
-  // place the second column used to occupy, so the deck still ends on a photo
-  // without needing a slide of its own.
   {
     kind: 'photo-text',
-    paragraphs: [
-      'Коли я зрозуміла, що найкращим часом для мови є раннє дитинство, моїм першим кроком стало створення школи для дітей Richmond Child Early English at Home. Але згодом саме батьки наших юних студентів сформували для мене новий масштабний виклик. Вони хотіли вивчати мову з таким же інтересом, комфортом, вибором і впевненістю, як їхні діти.',
-      'Чотири базові принципи будь-якого успішного навчання з довгостроковими результатами — це Комфорт, Впевненість, Цікавість і Вибір.',
-      'Одного разу наш клієнт сказав мені: «Іванно, англійська потрібна мені щодня. Але від самої думки про чергове навчання я вже втомився». І в цій фразі було набагато більше правди, ніж здається. Саме тоді народилася концепція персонального мовного супроводу The Key.',
+    blocks: [
+      { type: 'paragraph', text: 'Коли я зрозуміла, що найкращим часом для мови є раннє дитинство, моїм першим кроком стало створення школи для дітей Richmond Child Early English at Home. Але згодом саме батьки наших юних студентів сформували для мене новий масштабний виклик. Вони хотіли вивчати мову з таким же інтересом, комфортом, вибором і впевненістю, як їхні діти.' },
+      { type: 'quote', text: 'Чотири базові принципи будь-якого успішного навчання з довгостроковими результатами — це Комфорт, Впевненість, Цікавість і Вибір.' },
+      { type: 'paragraph', text: 'Одного разу наш клієнт сказав мені: «Іванно, англійська потрібна мені щодня. Але від самої думки про чергове навчання я вже втомився». І в цій фразі було набагато більше правди, ніж здається. Саме тоді народилася концепція персонального мовного супроводу The Key.' },
     ],
     photoSrc: '/38.jpg',
     photoAlt: 'Іванна Кучеренко',
     photoPosition: 'right',
   },
+  // Closing block: text only, in the same centred single column as the intro,
+  // so the deck opens and closes on matching layouts. Desktop shows it last
+  // (after the portrait); mobile puts it before its closing photo.
+  CLOSING_BLOCK,
 ];
 
 const INTRO_CTA = SLIDES[0].kind === 'intro' ? SLIDES[0].cta : '';
@@ -143,7 +194,7 @@ export const AboutFounderCarousel: FC = () => {
   const activeSlides = useMemo(
     () =>
       isMobile
-        ? [MOBILE_SLIDE_1, SLIDES[1], SLIDES[2], MOBILE_CLOSING_SLIDE]
+        ? [MOBILE_SLIDE_1, SLIDES[1], SLIDES[2], MOBILE_CLOSING_A, MOBILE_CLOSING_B, MOBILE_CLOSING_SLIDE]
         : SLIDES,
     [isMobile]
   );
@@ -225,13 +276,7 @@ export const AboutFounderCarousel: FC = () => {
               {slide.kind === 'intro' && (
                 <div className={styles.intro}>
                   {slide.heading && <h3 className={styles.heading}>{slide.heading}</h3>}
-                  {slide.blocks.map((block, bi) =>
-                    block.type === 'quote' ? (
-                      <blockquote key={bi} className={`${styles.quote} ${cormorantGaramond.className}`}>{block.text}</blockquote>
-                    ) : (
-                      <p key={bi} className={styles.paragraph}>{block.text}</p>
-                    )
-                  )}
+                  {renderBlocks(slide.blocks)}
                 </div>
               )}
 
@@ -252,9 +297,7 @@ export const AboutFounderCarousel: FC = () => {
                   </div>
                   <div className={slide.photoPosition === 'right' ? styles.photoTextContentRight : styles.photoTextContent}>
                     {slide.heading && <h3 className={styles.heading}>{slide.heading}</h3>}
-                    {slide.paragraphs.map((p, pi) => (
-                      <p key={pi} className={styles.paragraph}>{p}</p>
-                    ))}
+                    {renderBlocks(slide.blocks)}
                   </div>
                 </div>
               )}
@@ -262,13 +305,7 @@ export const AboutFounderCarousel: FC = () => {
               {slide.kind === 'columns' && (
                 <div className={slide.singleColumn ? styles.columnsSingle : styles.columns}>
                   {slide.heading && <h3 className={styles.columnsHeading}>{slide.heading}</h3>}
-                  {slide.blocks.map((block, bi) =>
-                    block.type === 'quote' ? (
-                      <blockquote key={bi} className={`${styles.quote} ${cormorantGaramond.className}`}>{block.text}</blockquote>
-                    ) : (
-                      <p key={bi} className={styles.paragraph}>{block.text}</p>
-                    )
-                  )}
+                  {renderBlocks(slide.blocks)}
                 </div>
               )}
 
