@@ -34,73 +34,64 @@ const eUkraineUltraLight = localFont({
 
 
 type TextBlock =
-  | { type: 'paragraph'; text: string; emphasis?: boolean }
+  | { type: 'paragraph'; text: string }
   | { type: 'quote'; text: string };
 
 type Slide =
   | { kind: 'intro'; heading?: string; blocks: TextBlock[]; cta: string }
   | { kind: 'photo-text'; heading?: string; blocks: TextBlock[]; photoSrc?: string; photoAlt: string; photoPosition?: 'left' | 'right'; photoObjectPosition?: string }
   | { kind: 'columns'; heading?: string; blocks: TextBlock[]; singleColumn?: boolean }
-  | { kind: 'photo-only'; photoSrc: string; photoAlt: string };
+  | { kind: 'photo-only'; photoSrc: string; photoAlt: string; blocks?: TextBlock[] };
 
 const MOBILE_BREAKPOINT = '(max-width: 768px)';
 
 // Every slide kind lays its copy out the same way, so they all go through
-// this: quotes get the serif italic treatment, paragraphs can opt into the
-// heavier closing-line weight.
+// this: quotes get the serif italic treatment, everything else is a paragraph.
 const renderBlocks = (blocks: TextBlock[]) =>
   blocks.map((block, i) =>
     block.type === 'quote' ? (
       <blockquote key={i} className={`${styles.quote} ${cormorantGaramond.className}`}>{block.text}</blockquote>
     ) : (
-      <p
-        key={i}
-        className={block.emphasis ? `${styles.paragraph} ${styles.paragraphEmphasis}` : styles.paragraph}
-      >
-        {block.text}
-      </p>
+      <p key={i} className={styles.paragraph}>{block.text}</p>
     )
   );
 
+const INVITATION = 'Запрошую Вас отримати свій персональний ключ.';
+
 // Mobile keeps its own closing photo (the book-and-key shot from slide 2),
 // since the portrait that closes the desktop deck is hidden on mobile along
-// with the other in-slide photos.
+// with the other in-slide photos. The invitation rides along under it, which
+// is what lets the closing text stay on one slide instead of splitting.
 const MOBILE_CLOSING_SLIDE: Slide = {
   kind: 'photo-only',
   photoSrc: '/51.jpg',
   photoAlt: 'The Key',
-};
-
-// Mobile-only: the closing block runs ~490px of copy at 375px, well past the
-// fixed section, so it splits in two the way the dense middle block used to.
-const MOBILE_CLOSING_A: Slide = {
-  kind: 'columns',
-  singleColumn: true,
-  blocks: [
-    { type: 'paragraph', text: 'The Key — це не стандартні курси англійської чи набір готових уроків. Це не групові або класичні індивідуальні заняття з вчителем. Це також не школа у звичному розумінні, де доводиться підлаштовуватися під систему. Навпаки — це простір, де англійська не конкурує з вашим життям, а стає його природною частиною.' },
-    { type: 'paragraph', text: 'Я впевнена, що англійська може приносити таке ж задоволення, як ранкова кава, улюблений подкаст за кермом чи вечір із книгою біля каміна.' },
-  ],
-};
-
-const MOBILE_CLOSING_B: Slide = {
-  kind: 'columns',
-  singleColumn: true,
-  blocks: [
-    { type: 'paragraph', text: 'Коли процес будується навколо вашого часу, інтересів, комфорту і вибору — внутрішній опір і напруга зникають, натомість з’являється стійкий результат. Мова стає тим, чим і має бути, — простором свободи і вашою тихою розкішшю.' },
-    { type: 'quote', text: 'The Key — це персональний мовний супровід, який робить англійську природною частиною вашого життя.' },
-    { type: 'paragraph', text: 'Запрошую Вас отримати свій персональний ключ.', emphasis: true },
-  ],
+  blocks: [{ type: 'paragraph', text: INVITATION }],
 };
 
 const CLOSING_BLOCK: Slide = {
   kind: 'columns',
   singleColumn: true,
   blocks: [
-    { type: 'paragraph', text: 'The Key — це не стандартні курси англійської чи набір готових уроків. Це не групові або класичні індивідуальні заняття з вчителем. Це також не школа у звичному розумінні, де доводиться підлаштовуватися під систему. Навпаки — це простір, де англійська не конкурує з вашим життям, а стає його природною частиною.' },
+    { type: 'paragraph', text: 'The Key — це не стандартні курси англійської, не набір готових уроків і не класичні заняття з вчителем. Це також не школа, де доводиться підлаштовуватися під систему. Навпаки — це простір, де англійська не конкурує з вашим життям, а стає його природною частиною.' },
     { type: 'paragraph', text: 'Я впевнена, що англійська може приносити таке ж задоволення, як ранкова кава, улюблений подкаст за кермом чи вечір із книгою біля каміна.' },
     { type: 'paragraph', text: 'Коли процес будується навколо вашого часу, інтересів, комфорту і вибору — внутрішній опір і напруга зникають, натомість з’являється стійкий результат. Мова стає тим, чим і має бути, — простором свободи і вашою тихою розкішшю.' },
     { type: 'quote', text: 'The Key — це персональний мовний супровід, який робить англійську природною частиною вашого життя.' },
-    { type: 'paragraph', text: 'Запрошую Вас отримати свій персональний ключ.', emphasis: true },
+    { type: 'paragraph', text: INVITATION },
+  ],
+};
+
+// Mobile-only: the invitation moves under the closing photo and the "ранкова
+// кава" line sheds one example, which is what keeps this on a single screen
+// rather than splitting in two.
+const MOBILE_CLOSING_BLOCK: Slide = {
+  kind: 'columns',
+  singleColumn: true,
+  blocks: [
+    { type: 'paragraph', text: 'The Key — це не стандартні курси англійської, не набір готових уроків і не класичні заняття з вчителем. Це також не школа, де доводиться підлаштовуватися під систему. Навпаки — це простір, де англійська не конкурує з вашим життям, а стає його природною частиною.' },
+    { type: 'paragraph', text: 'Я впевнена, що англійська може приносити таке ж задоволення, як ранкова кава чи вечір із книгою біля каміна.' },
+    { type: 'paragraph', text: 'Коли процес будується навколо вашого часу, інтересів, комфорту і вибору — внутрішній опір і напруга зникають, натомість з’являється стійкий результат. Мова стає тим, чим і має бути, — простором свободи і вашою тихою розкішшю.' },
+    { type: 'quote', text: 'The Key — це персональний мовний супровід, який робить англійську природною частиною вашого життя.' },
   ],
 };
 
@@ -194,7 +185,7 @@ export const AboutFounderCarousel: FC = () => {
   const activeSlides = useMemo(
     () =>
       isMobile
-        ? [MOBILE_SLIDE_1, SLIDES[1], SLIDES[2], MOBILE_CLOSING_A, MOBILE_CLOSING_B, MOBILE_CLOSING_SLIDE]
+        ? [MOBILE_SLIDE_1, SLIDES[1], SLIDES[2], MOBILE_CLOSING_BLOCK, MOBILE_CLOSING_SLIDE]
         : SLIDES,
     [isMobile]
   );
@@ -313,6 +304,7 @@ export const AboutFounderCarousel: FC = () => {
                 <div className={styles.photoOnlyRow}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img className={styles.photoOnly} src={slide.photoSrc} alt={slide.photoAlt} />
+                  {slide.blocks && renderBlocks(slide.blocks)}
                 </div>
               )}
             </div>
